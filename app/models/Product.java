@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import play.db.ebean.Model.Finder;
 
 import play.db.ebean.Model;
 
@@ -23,6 +24,9 @@ public class Product extends Model {
 	
 	@Column(name = "product_price")
 	public float productPrice;
+	
+	@Column(name = "product_quantity")
+	public float productqty;
 	
 	private static Finder<Integer, Product> find = new Finder<>(Integer.class, Product.class);
 	
