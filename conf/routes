@@ -9,3 +9,5 @@ GET     /                           controllers.Application.index()
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 POST	/submit-receipt		controllers.Application.submitReceipt()
+
+GET     /get-product-by-id                     controllers.Application.getProductById()

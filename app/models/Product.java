@@ -41,6 +41,10 @@ public class Product extends Model {
 
 	}
 	
+	public static Product findByIdAndQty(int id){
+		return find.where().eq("id",id).gt("productqty", 0).findUnique();
+
+	}
 	
 	 public static Map<String,String> getProductsAsMap() {
         LinkedHashMap<String,String> prodList = new LinkedHashMap<String,String>();

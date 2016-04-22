@@ -78,12 +78,14 @@
 		      receiptForm("product.id"),
 		      options(Product.getProductsAsMap),
 		      '_label -> "Product",
-		      '_default -> "-- Choose a Product --"
+		      '_default -> "-- Choose a Product --",
+		      'id->"prod",
+		      'onChange->"setPriceAndName(this)"
 		    )
 		      
 		      <a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
 		      <td class="description"><textarea>Monthly web updates for http://widgetcorp.com (Nov. 1 - Nov. 30, 2009)</textarea></td>
-		      <td><textarea class="cost">$650.00</textarea></td>
+		      <td><textarea class="cost" id="cost">$650.00</textarea></td>
 		      <td><textarea class="qty">1</textarea></td>
 		      <td><span class="price">$650.00</span></td>
 		  </tr>
@@ -124,6 +126,22 @@
 	</div>
 	}
     <script>
+    
+    function setPriceAndName(selected){
+    	//alert(selected.value);
+    	
+    	$.ajax({
+            type : "GET",
+            url : "@routes.Application.getProductById()",
+            data : "productId="+selected.value,
+        	success: function(data){
+        		document.getElementById("cost").value = data;
+				$("#cost").trigger('blur');
+				
+			}
+        });
+    }
+    
     $(document).ready(function() {
 
     	  $('input').click(function(){

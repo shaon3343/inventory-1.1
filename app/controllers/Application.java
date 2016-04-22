@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Product;
 import dummy.DummyReceipt;
 import play.*;
 import play.data.Form;
@@ -12,6 +13,18 @@ public class Application extends Controller {
         return ok(index.render("Create Receipt",dummyReceipt));
     }
   
+    public static Result getProductById(){
+    	
+    	//System.out.println(request().getQueryString("productId"));
+    	String pId = request().getQueryString("productId");
+    	Product prod = Product.findByIdAndQty(Integer.parseInt(pId));
+    	
+    	if(prod==null)
+    		System.out.println("################# EMPTY###########");
+    	
+    	return ok(""+prod.productPrice);
+    	
+    }
     public static Result submitReceipt(){
     	
 		return TODO;

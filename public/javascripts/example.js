@@ -94,4 +94,6 @@ function update_price() {
 function bind() {
   $(".cost").blur(update_price);
   $(".qty").blur(update_price);
+  
+  
 }
