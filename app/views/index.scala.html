@@ -1,8 +1,8 @@
-@(message: String)
+@(message: String,receiptForm: Form[dummy.DummyReceipt])
 
 @import helper._
 @main("Create Receipt") {
-    
+    @form(routes.Application.submitReceipt()){
 
 	<div id="page-wrap">
 
@@ -11,10 +11,10 @@
 		<div id="identity">
 		
             <textarea id="address">Chris Coyier
-123 Appleseed Street
-Appleville, WI 53719
-
-Phone: (555) 555-5555</textarea>
+				123 Appleseed Street
+				Appleville, WI 53719
+	
+				Phone: (555) 555-5555</textarea>
 
             <div id="logo">
 
@@ -40,7 +40,7 @@ Phone: (555) 555-5555</textarea>
 		<div id="customer">
 
             <textarea id="customer-title">Widget Corp.
-c/o Steve Widget</textarea>
+			c/o Steve Widget</textarea>
 
             <table id="meta">
                 <tr>
@@ -71,31 +71,22 @@ c/o Steve Widget</textarea>
 		      <th>Price</th>
 		  </tr>
 		  
+		  	  
 		  <tr class="item-row">
-		      <td class="item-name"><div class="delete-wpr"><select><option>Web Updates</option></select><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+		      <td class="item-name"><div class="delete-wpr">		      
+		       @select(
+		      receiptForm("product.id"),
+		      options(Product.getProductsAsMap),
+		      '_label -> "Product",
+		      '_default -> "-- Choose a Product --"
+		    )
+		      
+		      <a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
 		      <td class="description"><textarea>Monthly web updates for http://widgetcorp.com (Nov. 1 - Nov. 30, 2009)</textarea></td>
 		      <td><textarea class="cost">$650.00</textarea></td>
 		      <td><textarea class="qty">1</textarea></td>
 		      <td><span class="price">$650.00</span></td>
 		  </tr>
-		  
-		  <tr class="item-row">
-		      <td class="item-name"><div class="delete-wpr"><textarea>Web Updates</textarea><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
-		      <td class="description"><textarea>Monthly web updates for http://widgetcorp.com (Nov. 1 - Nov. 30, 2009)</textarea></td>
-		      <td><textarea class="cost">$650.00</textarea></td>
-		      <td><textarea class="qty">1</textarea></td>
-		      <td><span class="price">$650.00</span></td>
-		  </tr>
-		  
-		  <tr class="item-row">
-		      <td class="item-name"><div class="delete-wpr"><textarea>SSL Renewals</textarea><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
-
-		      <td class="description"><textarea>Yearly renewals of SSL certificates on main domain and several subdomains</textarea></td>
-		      <td><textarea class="cost">$75.00</textarea></td>
-		      <td><textarea class="qty">3</textarea></td>
-		      <td><span class="price">$225.00</span></td>
-		  </tr>
-		  
 		  <tr id="hiderow">
 		    <td colspan="5"><a id="addrow" href="javascript:;" title="Add a row">Add a row</a></td>
 		  </tr>
@@ -131,6 +122,7 @@ c/o Steve Widget</textarea>
 		</div>
 	
 	</div>
+	}
     <script>
     $(document).ready(function() {
 

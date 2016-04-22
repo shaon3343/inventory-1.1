@@ -1,13 +1,15 @@
 package models;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import play.db.ebean.Model.Finder;
 
+import play.db.ebean.Model.Finder;
 import play.db.ebean.Model;
 
 @Entity
@@ -38,4 +40,14 @@ public class Product extends Model {
 		return find.byId(id);
 
 	}
+	
+	
+	 public static Map<String,String> getProductsAsMap() {
+        LinkedHashMap<String,String> prodList = new LinkedHashMap<String,String>();
+        for(Product prod: Product.find.orderBy("productCode").findList()) {
+        	prodList.put(prod.id.toString(), prod.productName);
+        }
+        
+        return prodList;
+    }
 }
