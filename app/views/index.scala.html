@@ -1,6 +1,7 @@
 @(message: String,receiptForm: Form[dummy.DummyReceipt])
 
 @import helper._
+@import dummy.HTMLGenerator
 @main("Create Receipt") {
     @form(routes.Application.submitReceipt()){
 
@@ -54,7 +55,7 @@
                 </tr>
                 <tr>
                     <td class="meta-head">Amount Due</td>
-                    <td><div class="due">$875.00</div></td>
+                    <td><div class="due">$0</div></td>
                 </tr>
 
             </table>
@@ -84,10 +85,10 @@
 		    )
 		      
 		      <a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
-		      <td class="description"><textarea>Monthly web updates for http://widgetcorp.com (Nov. 1 - Nov. 30, 2009)</textarea></td>
-		      <td><textarea class="cost" id="cost">$650.00</textarea></td>
+		      <td class="description"><textarea></textarea></td>
+		      <td><textarea class="cost" id="cost">$0</textarea></td>
 		      <td><textarea class="qty">1</textarea></td>
-		      <td><span class="price">$650.00</span></td>
+		      <td><span class="price">$0</span></td>
 		  </tr>
 		  <tr id="hiderow">
 		    <td colspan="5"><a id="addrow" href="javascript:;" title="Add a row">Add a row</a></td>
@@ -96,13 +97,13 @@
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Subtotal</td>
-		      <td class="total-value"><div id="subtotal">$875.00</div></td>
+		      <td class="total-value"><div id="subtotal">$0</div></td>
 		  </tr>
 		  <tr>
 
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Total</td>
-		      <td class="total-value"><div id="total">$875.00</div></td>
+		      <td class="total-value"><div id="total">$0</div></td>
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
@@ -113,7 +114,7 @@
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line balance">Balance Due</td>
-		      <td class="total-value balance"><div class="due">$875.00</div></td>
+		      <td class="total-value balance"><div class="due">$0</div></td>
 		  </tr>
 		
 		</table>
@@ -135,9 +136,8 @@
             url : "@routes.Application.getProductById()",
             data : "productId="+selected.value,
         	success: function(data){
-        		document.getElementById("cost").value = data;
-				$("#cost").trigger('blur');
-				
+        		this.value = data;
+				//this.trigger('blur');
 			}
         });
     }
@@ -151,7 +151,16 @@
     	  $("#paid").blur(update_balance);
     	   
     	  $("#addrow").click(function(){
-    	    $(".item-row:last").after('<tr class="item-row"><td class="item-name"><div class="delete-wpr"><textarea>Item Name</textarea><a class="delete" href="javascript:;" title="Remove row">X</a></div></td><td class="description"><textarea>Description</textarea></td><td><textarea class="cost">$0</textarea></td><td><textarea class="qty">0</textarea></td><td><span class="price">$0</span></td></tr>');
+    		  
+    		  $.ajax({
+    	            type : "GET",
+    	            url : "@routes.Application.getHTML()",
+    	            
+    	        	success: function(data){
+    	        		$(".item-row:last").after(data);    		    					
+    				}
+    		  });
+    	    
     	    if ($(".delete").length > 0) $(".delete").show();
     	    bind();
     	  });
