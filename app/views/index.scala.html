@@ -136,8 +136,13 @@
             url : "@routes.Application.getProductById()",
             data : "productId="+selected.value,
         	success: function(data){
-        		this.value = data;
-				//this.trigger('blur');
+        		bind();
+        		 $('table[id*="items"] tbody tr.item-row:last td textarea.cost:last').val(data);
+        		//document.getElementById("cost").value = data;
+				//$("#cost").trigger('blur');
+				bind();
+				  $('table[id*="items"] tbody tr.item-row:last td textarea#cost:last').trigger('blur');
+				  bind();
 			}
         });
     }
