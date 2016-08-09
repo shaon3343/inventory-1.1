@@ -30,6 +30,8 @@ public class Product extends Model {
 	@Column(name = "product_quantity")
 	public float productQty;
 	
+	
+	
 	private static Finder<Integer, Product> find = new Finder<>(Integer.class, Product.class);
 	
 	public static List<Product> all() {
@@ -40,9 +42,14 @@ public class Product extends Model {
 		return find.byId(id);
 
 	}
-	public static Product checkProdAndQty(String prodName, int qty){
-		return find.where().eq("productName",prodName).ge("productQty",qty).findUnique();
+	public static List<Product> checkProdNameAndQty(String prodName, int qty){
+		return find.where().eq("productName",prodName).ge("productQty",qty).findList();
 	}
+	
+	public static List<Product> checkProdAndQty(int prodId, int qty){
+		return find.where().eq("id",prodId).ge("productQty",qty).findList();
+	}
+	
 	public static Product findByIdAndQty(int id){
 		return find.where().eq("id",id).gt("productQty", 0).findUnique();
 

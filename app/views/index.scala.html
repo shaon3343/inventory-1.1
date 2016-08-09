@@ -92,9 +92,9 @@
 		      </select>
 		    
 		      <a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
-		      <td class="description"><textarea></textarea></td>
+		      <td class="description"><textarea id="desc"></textarea></td>
 		      <td><textarea class="cost" id="cost">$0</textarea></td>
-		      <td><textarea class="qty">1</textarea></td>
+		      <td><textarea class="qty" onblur="checkQty(this)" id="qty">1</textarea></td>
 		      <td><span class="price">$0</span></td>
 		  </tr>
 		  <tr id="hiderow">
@@ -146,19 +146,23 @@
             dataType:'json',
         	success: function(data){
        
-        	console.log(data.prodPrice);
-        		if(data=="NO" || data=="")
+        	//console.log(data);
+        		/*if(data=="NO" || data=="")
         		{
         			bind();
         			$(selected).parent().parent().parent().find('textarea[id*="cost"]').val(0);
+        			$(selected).parent().parent().parent().find('textarea[id*="qty"]').val(0);
+        			$(selected).parent().parent().parent().find('textarea[id*="desc"]').val("");
         			$(selected).parent().parent().parent().find('textarea[id*="cost"]').trigger('blur');
         			bind();
         			//var alert = "<span style="color:red"><h5> THIS PRODUCT IS NOT AVAILABLE </h5></span>"
         			//	$(selected).parent().parent().parent().css('background','red');
         		}
-        		else{
+        		else{ */
 	        		bind();
 	        		$(selected).parent().parent().parent().find('textarea[id*="cost"]').val(data.prodPrice);
+	        		$(selected).parent().parent().parent().find('textarea[id*="desc"]').val(data.prodCode);
+	        		$(selected).parent().parent().parent().find('textarea[id*="qty"]').val(0);
 	        		// $('table[id*="items"] tbody tr.item-row:last td textarea.cost:last').val(data);
 	        		//document.getElementById("cost").value = data;
 					//$("#cost").trigger('blur');
@@ -166,9 +170,45 @@
 					//  $('table[id*="items"] tbody tr.item-row:last td textarea#cost:last').trigger('blur');
 					$(selected).parent().parent().parent().find('textarea[id*="cost"]').trigger('blur');
 					  bind();
-				}
+			//	}
 			}
         });
+    }
+    
+    
+    function checkQty(thisQty){
+    	var selectedProd = $(thisQty).parent().parent().find('select option:selected').val();
+    	var qty = $(thisQty).val();
+    	console.log("Selected Prod:"+selectedProd);
+    	console.log("Qty :"+qty);
+    	
+    	$.ajax({
+            type : "GET",
+            url : "@routes.Application.checkProdQty()",
+            data : {prodId:selectedProd,prodQty:qty},
+            dataType:'json',
+        	success: function(data){
+        		console.log(data);
+       			if(data.isAvailable){
+       				console.log("available");
+       				$(thisQty).parent().parent().find('textarea[id*="cost"]').val(data.prodPrice);
+       				$(thisQty).parent().parent().find('textarea[id*="cost"]').trigger('blur');
+       				bind();
+       				$(thisQty).parent().parent().css('background-color','');
+       				
+       			}
+       			else{
+       				console.log("not Available");
+       				$(thisQty).parent().parent().find('textarea[id*="cost"]').val(0);
+       				$(thisQty).parent().parent().find('textarea[id*="qty"]').val(0);
+       				$(thisQty).parent().parent().find('textarea[id*="cost"]').trigger('blur');
+       				bind();
+        			$(thisQty).parent().parent().find('textarea[id*="desc"]').val("");
+        			$(thisQty).parent().parent().css('background-color','red');
+       			}
+       		}
+        });
+    	
     }
     
     $(document).ready(function() {
