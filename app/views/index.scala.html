@@ -4,7 +4,22 @@
 @import dummy.HTMLGenerator
 @main("Create Receipt") {
     @form(routes.Application.submitReceipt()){
-
+	
+	<style>
+		input[type=button] {
+	    width: 130px;
+	    height: 30px;
+	    
+	    background-color: #006db2;
+	    border: medium none #006db2;
+	    color: white;
+	    font-family: Arial, Helvetica, sans-serif;
+	    font-size: 12px;
+	    font-weight: bold;
+	}
+	
+	</style>
+	
 	<div id="page-wrap">
 
 		<textarea id="header">INVOICE</textarea>
@@ -125,7 +140,7 @@
 		  </tr>
 		
 		</table>
-		
+		<input type="button" value="submit" onclick="processAndSubmit()"/>
 		<div id="terms">
 		  <h5>Terms</h5>
 		  <textarea>NET 30 Days. Finance Charge of 1.5% will be made on unpaid balances after 30 days.</textarea>
@@ -134,6 +149,8 @@
 	</div>
 	}
     <script>
+    
+    
     
     function setPriceAndName(selected){
     	//alert(selected.value);
@@ -179,8 +196,8 @@
     function checkQty(thisQty){
     	var selectedProd = $(thisQty).parent().parent().find('select option:selected').val();
     	var qty = $(thisQty).val();
-    	console.log("Selected Prod:"+selectedProd);
-    	console.log("Qty :"+qty);
+    //	console.log("Selected Prod:"+selectedProd);
+    //	console.log("Qty :"+qty);
     	
     	$.ajax({
             type : "GET",
@@ -188,9 +205,9 @@
             data : {prodId:selectedProd,prodQty:qty},
             dataType:'json',
         	success: function(data){
-        		console.log(data);
+        		//console.log(data);
        			if(data.isAvailable){
-       				console.log("available");
+       				//console.log("available");
        				$(thisQty).parent().parent().find('textarea[id*="cost"]').val(data.prodPrice);
        				$(thisQty).parent().parent().find('textarea[id*="cost"]').trigger('blur');
        				bind();
@@ -198,7 +215,7 @@
        				
        			}
        			else{
-       				console.log("not Available");
+       				//console.log("not Available");
        				$(thisQty).parent().parent().find('textarea[id*="cost"]').val(0);
        				$(thisQty).parent().parent().find('textarea[id*="qty"]').val(0);
        				$(thisQty).parent().parent().find('textarea[id*="cost"]').trigger('blur');
@@ -209,6 +226,21 @@
        		}
         });
     	
+    }
+    
+    function processAndSubmit(){
+    	var prodList = "";
+    	 $('table[id*="items"] tbody tr.item-row').each(function(index){
+    	 	//console.log($(this).find('textarea[id*="cost"]').val());
+    	 	var prodRow = "";
+    	 	var prodId = $(this).find('select option:selected').val();
+    	 	var prodCost = $(this).find('textarea[id*="cost"]').val();
+    	 	var prodQty = $(this).find('textarea[id*="qty"]').val();
+    	 	prodRow = prodId+"#"+prodCost+"#"+prodQty;
+    	 	prodList = prodList + prodRow+"|";
+    	 	
+    	 });
+    	 console.log(prodList);
     }
     
     $(document).ready(function() {
