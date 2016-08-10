@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import play.db.ebean.Model.Finder;
 import play.db.ebean.Model;
+import util.AppConst;
 
 @Entity
 @Table(name="product")
@@ -50,6 +51,16 @@ public class Product extends Model {
 		return find.where().eq("id",prodId).ge("productQty",qty).findList();
 	}
 	
+	public static boolean checkProdAndQty(String prodId, String qty){
+		int id = Integer.parseInt(prodId);
+		int qt = Integer.parseInt(qty);
+		List<Product> prod =  checkProdAndQty(id, qt);
+		if(prod.isEmpty())
+			return false;
+		else
+			return true;
+	}
+	
 	public static Product findByIdAndQty(int id){
 		return find.where().eq("id",id).gt("productQty", 0).findUnique();
 
@@ -63,4 +74,16 @@ public class Product extends Model {
         
         return prodList;
     }
+
+	public static boolean checkAllProdQty(List<Map<String, String>> prodList) {
+		boolean flag = true;
+		for(Map<String,String> prod:prodList){
+			if(!checkProdAndQty(prod.get(AppConst.productId),prod.get(AppConst.productQty)))
+			{
+				flag=false;
+				break;
+			}
+		}
+		return flag;
+	}
 }

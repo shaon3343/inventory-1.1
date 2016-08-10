@@ -1,6 +1,9 @@
 package controllers;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
@@ -9,8 +12,10 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import models.Person;
 import models.Product;
+import models.Receipts;
 import dummy.DummyReceipt;
 import dummy.HTMLGenerator;
+import dummy.Jutility;
 import play.*;
 import play.data.Form;
 import play.libs.Json;
@@ -145,7 +150,28 @@ public class Application extends Controller {
 	}
 
 	public static Result submitReceipt(){
-
-		return TODO;
+		
+		//String json = request().getQueryString("jsonList");
+		JsonNode json = request().body().asJson();
+		System.out.println("JSON REQUEST: "+json);
+		
+		if(json == null) {
+	        return badRequest("Expecting Json data");
+	    } else {
+	          	
+	       List<Map<String,String> > prodList = Jutility.processJSON(json);
+	       boolean checkAllProd = Product.checkAllProdQty(prodList);
+	       if(checkAllProd){
+	    	   
+	    	   boolean savedRec = Receipts.saveReceipts(prodList);
+	       }
+	       
+	       
+	    }
+		flash("receiptSaved","RECEIPT SAVED SUCCESSFULLY");
+		return ok("OK");
 	}
+	
+	
+	
 }

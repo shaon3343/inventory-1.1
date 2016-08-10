@@ -76,7 +76,7 @@
             </table>
 		
 		</div>
-		
+		<span style="color:green"><h3> @flash.get("receiptSaved")</h3></span>
 		<table id="items">
 		
 		  <tr>
@@ -90,14 +90,7 @@
 		  	  
 		  <tr class="item-row">
 		      <td class="item-name"><div class="delete-wpr">		      
-		      <!--  select(
-		      receiptForm("product.id"),
-		      options(Product.getProductsAsMap),
-		      '_label -> "Product",
-		      '_default -> "-- Choose a Product --",
-		      'id->"prod",
-		      'onChange->"setPriceAndName(this)"
-		    ) -->
+		     
 		    
 		      <select id="prod" name="product.id" onchange="setPriceAndName(this)">
 		      <option class="blank" value="">-- Choose a Product --</option>
@@ -229,18 +222,45 @@
     }
     
     function processAndSubmit(){
-    	var prodList = "";
+    	//var prodList = "";
+    	 jsonProdList = [];
     	 $('table[id*="items"] tbody tr.item-row').each(function(index){
-    	 	//console.log($(this).find('textarea[id*="cost"]').val());
-    	 	var prodRow = "";
+    	 	
+    	 	prod={};
+    		
+    	 	prod["prodId"]=$(this).find('select option:selected').val();
+    	 
+    	 	prod["prodCost"]=$(this).find('textarea[id*="cost"]').val();
+    	 	
+    	 	prod["prodQty"]=$(this).find('textarea[id*="qty"]').val();
+    	 	
+    	 	jsonProdList.push(prod); 
+    	 
+    	 	
+    	 /*	var prodRow = "";
     	 	var prodId = $(this).find('select option:selected').val();
     	 	var prodCost = $(this).find('textarea[id*="cost"]').val();
     	 	var prodQty = $(this).find('textarea[id*="qty"]').val();
     	 	prodRow = prodId+"#"+prodCost+"#"+prodQty;
-    	 	prodList = prodList + prodRow+"|";
+    	 	prodList = prodList + prodRow+"|"; */ 
     	 	
     	 });
-    	 console.log(prodList);
+    	 console.log(jsonProdList);
+    	 //console.log(prodList);
+    	 
+    	  $.ajax({
+            url: '@routes.Application.submitReceipt()',
+            type: 'post',
+            contentType: "application/json",
+            data:  JSON.stringify(jsonProdList),
+            success: function (data) {
+            	if(data=="OK")
+              		location.reload();
+              		
+            }
+           
+        });
+    	 
     }
     
     $(document).ready(function() {
