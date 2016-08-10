@@ -10,7 +10,7 @@ import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
 
-import models.Person;
+
 import models.Product;
 import models.Receipts;
 import dummy.DummyReceipt;
