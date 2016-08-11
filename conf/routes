@@ -12,7 +12,7 @@ POST	/submit-receipt		controllers.Application.submitReceipt()
 
 GET     /get-product-by-id  controllers.Application.getProductById()
 
-GET  	/get-html-row		controllers.Application.getHTML()
+POST  	/get-html-row		controllers.Application.getHTML()
 
 GET  	/check-prod-qty		controllers.Application.checkProdQty()
 

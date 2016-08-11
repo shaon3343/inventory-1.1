@@ -1,17 +1,25 @@
 package dummy;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import util.AppConst;
 import models.Product;
 
 public class HTMLGenerator {
 
-	public static String generateROw(){
+	public static String generateROw(List<Map<String, String>> prodList){
+		List<Integer> prodIdList = new ArrayList<Integer>();
+		for(Map<String,String> mp:prodList){
+			prodIdList.add(Integer.parseInt(mp.get(AppConst.productId)));
+		}
+		
 		String rowWithSelectTag ="<tr class=\"item-row\">"
 			  +"<td class=\"item-name\"><div class=\"delete-wpr\">"
 			  +"<select id=\"prod\" name=\"product.id\" onchange=\"setPriceAndName(this)\">"
 			  +"<option class=\"blank\" value=\"\">-- Choose a Product --</option>";
-		      for(Map.Entry<String,String> mp:Product.getProductsAsMap().entrySet()){
+		      for(Map.Entry<String,String> mp:Product.getProductsWithoutThese(prodIdList).entrySet()){
 		    	  rowWithSelectTag = rowWithSelectTag		    	
 		    			  +"<option value="+mp.getKey()+">"+mp.getValue()+"</option>";
 		      }

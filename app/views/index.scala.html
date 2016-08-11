@@ -221,8 +221,7 @@
     	
     }
     
-    function processAndSubmit(){
-    	//var prodList = "";
+    function processTableRow(){
     	 jsonProdList = [];
     	 $('table[id*="items"] tbody tr.item-row').each(function(index){
     	 	
@@ -246,9 +245,27 @@
     	 	
     	 });
     	 console.log(jsonProdList);
-    	 //console.log(prodList);
+    	 return jsonProdList;
+    }
+    
+    function processAndSubmit(){
+    	 jsonProdList = processTableRow();
+    /*	 $('table[id*="items"] tbody tr.item-row').each(function(index){
+    	 	
+    	 	prod={};
+    		
+    	 	prod["prodId"]=$(this).find('select option:selected').val();
     	 
-    	  $.ajax({
+    	 	prod["prodCost"]=$(this).find('textarea[id*="cost"]').val();
+    	 	
+    	 	prod["prodQty"]=$(this).find('textarea[id*="qty"]').val();
+    	 	
+    	 	jsonProdList.push(prod); 
+    	 	
+    	 });
+    	 console.log(jsonProdList);*/
+    	 
+    	 $.ajax({
             url: '@routes.Application.submitReceipt()',
             type: 'post',
             contentType: "application/json",
@@ -272,11 +289,13 @@
     	  $("#paid").blur(update_balance);
     	   
     	  $("#addrow").click(function(){
+    		  jsonProdList = processTableRow();
     		  
     		  $.ajax({
-    	            type : "GET",
-    	            url : "@routes.Application.getHTML()",
-    	            
+    		  		type: 'post',
+              		contentType: "application/json",
+                    url : "@routes.Application.getHTML()",
+    	      		data:  JSON.stringify(jsonProdList),
     	        	success: function(data){
     	        		$(".item-row:last").after(data);    		    					
     				}

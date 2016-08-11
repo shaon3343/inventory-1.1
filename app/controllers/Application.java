@@ -115,7 +115,18 @@ public class Application extends Controller {
 	}
 
 	public static Result getHTML(){
-		return ok(HTMLGenerator.generateROw());
+		
+		JsonNode json = request().body().asJson();
+		//System.out.println("JSON REQUEST: "+json);
+		
+		if(json == null) {
+	        return badRequest("Expecting Json data");
+	    } else {
+	          	
+	       List<Map<String,String> > prodList = Jutility.processJSON(json);
+	       return ok(HTMLGenerator.generateROw(prodList));
+	    }
+		
 
 	}
 	public static Result checkProdQty(){
@@ -153,7 +164,7 @@ public class Application extends Controller {
 		
 		//String json = request().getQueryString("jsonList");
 		JsonNode json = request().body().asJson();
-		System.out.println("JSON REQUEST: "+json);
+	//	System.out.println("JSON REQUEST: "+json);
 		
 		if(json == null) {
 	        return badRequest("Expecting Json data");

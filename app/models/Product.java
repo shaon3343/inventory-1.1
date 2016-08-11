@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.avaje.ebean.Expr;
+
 import play.db.ebean.Model.Finder;
 import play.db.ebean.Model;
 import util.AppConst;
@@ -85,5 +87,18 @@ public class Product extends Model {
 			}
 		}
 		return flag;
+	}
+
+	public static Map<String, String> getProductsWithoutThese(List<Integer> prodIdList) {
+		 
+		LinkedHashMap<String,String> prodList = new LinkedHashMap<String,String>();
+		
+		List<Product> pList = find.where().not(Expr.in("id",prodIdList)).findList();
+		
+	        for(Product prod: pList) {
+	        	prodList.put(prod.id.toString(), prod.productName);
+	        }
+	        
+	        return prodList;
 	}
 }
