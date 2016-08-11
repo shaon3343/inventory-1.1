@@ -14,6 +14,7 @@ create table product (
 
 create table receipts (
   id                        bigint auto_increment not null,
+  receipt_id                varchar(255),
   product_id                bigint,
   product_quantity          float,
   sales_man_id              bigint,
@@ -32,6 +33,8 @@ create table sales_man (
   constraint pk_sales_man primary key (id))
 ;
 
+alter table receipts add constraint fk_receipts_productId_1 foreign key (product_id) references product (id) on delete restrict on update restrict;
+create index ix_receipts_productId_1 on receipts (product_id);
 
 
 
