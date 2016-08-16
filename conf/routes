@@ -16,4 +16,8 @@ POST  	/get-html-rows      controllers.Application.getHTML()
 
 GET  	/check-prod-qty		controllers.Application.checkProdQty()
 
+GET		/test-auto-suggest	controllers.Application.testAutoSuggest()
+
+GET		/json-auto-suggest  controllers.Application.getProductList()
+
 #POST     /providejson                           controllers.Application.provideJSONData()

@@ -1,15 +1,18 @@
 package controllers;
 
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
-
 
 import models.Product;
 import models.Receipts;
@@ -24,63 +27,18 @@ import views.html.*;
 
 public class Application extends Controller {
 	static Form<DummyReceipt> dummyReceipt = Form.form(DummyReceipt.class);
+	public static Result testAutoSuggest(){
+		return ok(testAutoSuggest.render());
+		
+	}
 	public static Result index() {
 		return ok(index.render("Create Receipt",dummyReceipt));
 	}
-	
-	/************************ SHOIKOITTA **********************/
-	 /* public static Result provideJSONData() {
-
-		  JsonNode json = request().body().asJson();
-
-		  if (json == null) {
-		   return badRequest("Expecting Json data");
-		  } else {
-		   String username = json.findPath("username").getTextValue();
-		   String password = json.findPath("password").getTextValue();
-		   if (username == null && password == null) {
-		    return badRequest("Missing parameter.");
-		   } else {
-		    System.out.print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM" + username);
-		    System.out.print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP" + password);
-		    Person person = new Person(username, password);
-
-		    if (person.userName.equals("shoikat") && person.password.equals("123")) {
-
-		     JsonNodeFactory jnf = JsonNodeFactory.instance;
-		     ArrayNode arrayNode = new ArrayNode(jnf);
-
-		     ObjectNode chAsJson = Json.newObject();
-
-		     chAsJson.put("userId", 1);
-		     chAsJson.put("apiKey", "C001");
-
-		     arrayNode.add(chAsJson);
-
-		     return ok(chAsJson);
-		    } else {
-
-		     return ok("");
-		    }
-
-		   }
-		  }}*/
-	
-	/********************* SHOIKOITTA ENDS ***********************/
-
 	public static Result getProductById(){
-
-		//System.out.println(request().getQueryString("productId"));
 		try{
 			String pId = request().getQueryString("productId");
-			Product prod = Product.findByIdAndQty(Integer.parseInt(pId));
-			/*if(prod==null){
-				return ok("NO");
-			}*/
+			Product prod = Product.findByIdAndQty(Integer.parseInt(pId));			
 			ObjectNode jsonResp =  toJSON(prod);
-			//	System.out.println("############ jsonResponse: "+jsonResp);
-
-			//return ok(""+prod.productPrice);
 			return ok(jsonResp);
 		}catch(Exception e){
 			Logger.info("EXCEPTION",e);
@@ -94,7 +52,24 @@ public class Application extends Controller {
 
 	}
 
+	public static Result getProductList(){
 
+		//System.out.println(request().getQueryString("productId"));
+		try{
+			String pCode = request().getQueryString("productCode");
+			List<Product> prodList = Product.suggestProdList(pCode);
+			final StringWriter sw =new StringWriter();
+		    final ObjectMapper mapper = new ObjectMapper();
+		    mapper.writeValue(sw, prodList);
+		    String toJsonList = sw.toString();//use toString() to convert to JSON
+		    sw.close(); 
+		    return ok(toJsonList);
+		}catch(Exception e){
+			Logger.info("EXCEPTION",e);
+			return ok("");
+		}
+
+	}
 
 	private static ObjectNode toJSON(Product prod) {
 		//JsonNode json = request().body().asJson();
