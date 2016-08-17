@@ -90,16 +90,16 @@
 		  	  
 		  <tr class="item-row">
 		      <td class="item-name"><div class="delete-wpr">		      
-		     
-		    
-		      <select id="prod" name="product.id" onchange="setPriceAndName(this)">
+		      <input id="prodSuggest">
+ 			  <input type="hidden" id="prodSel"/>
+			  <select id="prod" name="product.id" onchange="setPriceAndName(this)">
 		      <option class="blank" value="">-- Choose a Product --</option>
 		    	@for((k,v) <- Product.getProductsAsMap()){
 		      		<option value="@k">@v</option>
 		      }
 		      </select>
 		    
-		      <a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+		      <a class="delete" href="javascript:;" onclick="remove(this)" title="Remove row">X</a></div></td>
 		      <td class="description"><textarea id="desc"></textarea></td>
 		      <td><textarea class="cost" id="cost">$0</textarea></td>
 		      <td><textarea class="qty" onblur="checkQty(this)" id="qty">1</textarea></td>
@@ -141,6 +141,64 @@
 	
 	</div>
 	}
+	
+	<script>
+  $( function() {
+    var cache = {};
+    $( "#birds" ).autocomplete({
+      minLength: 2,
+      source: function( request, response ) {
+        var term = request.term;
+        if ( term in cache ) {
+          response( cache[ term ] );
+          return;
+        }
+ 
+        $.getJSON( "@routes.Application.getProductList()", request, function( data, status, xhr ) {
+          var rows = JSONparse(data);
+          cache[ term ] = rows;
+         //console.log(rows);
+          response( rows );
+        });
+      },
+      
+      select: function(event, ui) {
+      
+            var focusedElement = $(this);
+            focusedElement.val(ui.item.label);
+            $('#prodSel').val(ui.item.value);
+            
+            console.log("ITEM VALUE: "+ui.item.value);
+            console.log("ITEM ID: "+ui.item.id);
+
+            return false;
+        
+    },
+    focus: function (event, ui) {
+       this.value = ui.item.label;
+       event.preventDefault(); // Prevent the default focus behavior.
+	}
+      
+    });
+  } );
+  
+  function JSONparse(data) {
+    var rows = [];
+    var rowData = null;
+    var dataLength = data.length;
+    for (var i = 0; i < dataLength; i++) {
+        rowData = data[i];
+        rows[i] = {
+        	id: rowData.id,
+            label: rowData.productName,
+            value: rowData.productPrice
+        };
+    }
+    return rows;
+}
+  
+  </script>
+	
     <script>
     
     
@@ -244,7 +302,7 @@
     	 	prodList = prodList + prodRow+"|"; */ 
     	 	
     	 });
-    	 console.log(jsonProdList);
+    	// console.log(jsonProdList);
     	 return jsonProdList;
     }
     
@@ -279,7 +337,14 @@
         });
     	 
     }
+     
+     function remove(event){
+     	$(event).closest('tr').remove();
+   		update_total();
+    	if ($(".delete").length < 2) $(".delete").hide();
+     }
     
+        	  
     $(document).ready(function() {
 
     	  $('input').click(function(){
@@ -306,13 +371,7 @@
     	  });
     	  
     	  bind();
-    	  
-    	  $(".delete").live('click',function(){
-    	    $(this).parents('.item-row').remove();
-    	    update_total();
-    	    if ($(".delete").length < 2) $(".delete").hide();
-    	  });
-    	  
+    	      	  
     	  $("#cancel-logo").click(function(){
     	    $("#logo").removeClass('edit');
     	  });
