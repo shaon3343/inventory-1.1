@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>jQuery UI Autocomplete - Remote JSONP datasource</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
+  
   <style>
+  
+  
   .ui-autocomplete-loading {
     background: white url("@routes.Assets.at("images/ui-anim_basic_16x16.gif")") right center no-repeat;
   }
@@ -30,9 +32,13 @@
             productCode: request.term
           },
           success: function( data ) {
- 
-            // Handle 'no match' indicated by [ "" ] response
-            response( data.length === 1 && data[ 0 ].length === 0 ? [] : data );
+          console.log(data);
+ 			response($.map(data, function (item) {
+            return {
+                label: item.productName,
+                value: item.id
+            };
+          }))
           }
         } );
       },

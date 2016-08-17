@@ -104,7 +104,7 @@ public class Product extends Model {
 	
 	public static List<Product> suggestProdList(String prodCode){
 		
-		List<Product> listProd = find.where().ilike("productCode","%"+prodCode+"%").findList();
+		List<Product> listProd = find.where().ilike("productCode","%"+prodCode+"%").ge("productQty",1).findList();
 		
         return listProd;
 	}

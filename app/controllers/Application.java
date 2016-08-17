@@ -16,6 +16,7 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import models.Product;
 import models.Receipts;
+import dummy.DummyProduct;
 import dummy.DummyReceipt;
 import dummy.HTMLGenerator;
 import dummy.Jutility;
@@ -28,7 +29,7 @@ import views.html.*;
 public class Application extends Controller {
 	static Form<DummyReceipt> dummyReceipt = Form.form(DummyReceipt.class);
 	public static Result testAutoSuggest(){
-		return ok(testAutoSuggest.render());
+		return ok(testingAugoSuggest.render());
 		
 	}
 	public static Result index() {
@@ -56,8 +57,18 @@ public class Application extends Controller {
 
 		//System.out.println(request().getQueryString("productId"));
 		try{
-			String pCode = request().getQueryString("productCode");
+			String pCode = request().getQueryString("term");
 			List<Product> prodList = Product.suggestProdList(pCode);
+		//	List<DummyProduct> dumProd = new ArrayList<DummyProduct>(); 
+			
+			/*for(Product p : prodList){
+				DummyProduct dum = new DummyProduct();
+				dum.id = p.id;
+				dum.label=p.productName;
+				dum.value = ""+p.productPrice;
+				dumProd.add(dum);
+			}*/
+			
 			final StringWriter sw =new StringWriter();
 		    final ObjectMapper mapper = new ObjectMapper();
 		    mapper.writeValue(sw, prodList);
