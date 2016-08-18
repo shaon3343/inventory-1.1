@@ -17,8 +17,8 @@ public class HTMLGenerator {
 		
 		String rowWithSelectTag ="<tr class=\"item-row\">"
 			  +"<td class=\"item-name\"><div class=\"delete-wpr\">"
-			 /* +"<input id=\"prodSuggest\">"
-		      +"<input type=\"hidden\" id=\"prodSel\"/>"*/	
+			  +"<input id=\"prodSuggest\" class=\"prodSuggest\" >"
+		      +"<input type=\"hidden\" id=\"prodSel\"/>"
 			  
 			  +"<select id=\"prod\" name=\"product.id\" onchange=\"setPriceAndName(this)\">"
 			  +"<option class=\"blank\" value=\"\">-- Choose a Product --</option>";
