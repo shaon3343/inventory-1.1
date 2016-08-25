@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +106,20 @@ public class Product extends Model {
 	public static List<Product> suggestProdList(String prodCode){
 		
 		List<Product> listProd = find.where().ilike("productCode","%"+prodCode+"%").ge("productQty",1).findList();
+		
+        return listProd;
+	}
+
+	public static List<Product> suggestProdList(String prodCode,List<Map<String, String>> existProdList) {
+		List<Integer> prodIdList = new ArrayList<Integer>();
+		for(Map<String,String> mp:existProdList){
+			prodIdList.add(Integer.parseInt(mp.get(AppConst.productId)));
+		}
+		
+		List<Product> listProd = find.where()
+				.not(Expr.in("id",prodIdList))
+				.ilike("productCode","%"+prodCode+"%")
+				.ge("productQty",1).findList();
 		
         return listProd;
 	}

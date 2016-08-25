@@ -58,7 +58,17 @@ public class Application extends Controller {
 		//System.out.println(request().getQueryString("productId"));
 		try{
 			String pCode = request().getQueryString("term");
-			List<Product> prodList = Product.suggestProdList(pCode);
+			
+			System.out.println("### TERM:"+pCode);
+			
+			JsonNode json = request().body().asJson();
+			List<Map<String,String> > existProdList = new ArrayList<>(); 
+			if(json!=null){
+				 existProdList = Jutility.processJSON(json);
+			}
+			
+			
+			List<Product> prodList = Product.suggestProdList(pCode,existProdList);
 		//	List<DummyProduct> dumProd = new ArrayList<DummyProduct>(); 
 			
 			/*for(Product p : prodList){

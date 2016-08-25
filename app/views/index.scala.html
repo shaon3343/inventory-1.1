@@ -92,12 +92,12 @@
 		      <td class="item-name"><div class="delete-wpr">		      
 		      <input id="prodSuggest" class="prodSuggest">
  			  <input type="hidden" id="prodSel"/>
-			  <select id="prod" name="product.id" onchange="setPriceAndName(this)">
+			<!--   <select id="prod" name="product.id" onchange="setPriceAndName(this)">
 		      <option class="blank" value="">-- Choose a Product --</option>
-		    	@for((k,v) <- Product.getProductsAsMap()){
-		      		<option value="@k">@v</option>
+		    	for((k,v) <- Product.getProductsAsMap()){
+		      		<option value="k">v</option>
 		      }
-		      </select>
+		      </select>  -->
 		    
 		      <a class="delete" href="javascript:;" onclick="remove(this)" title="Remove row">X</a></div></td>
 		      <td class="description"><textarea id="desc"></textarea></td>
@@ -161,11 +161,9 @@
   
   </script>
 	
-    <script>
-    
-    
-    
-    function setPriceAndName(selected){
+	<script>
+       
+    function setPriceAndName(selected){ 
     	//alert(selected.value);
     	
     //	console.log($(selected).parent().parent().parent().find('textarea[id*="cost"]').val());
@@ -207,7 +205,8 @@
     
     
     function checkQty(thisQty){
-    	var selectedProd = $(thisQty).parent().parent().find('select option:selected').val();
+    	//var selectedProd = $(thisQty).parent().parent().find('select option:selected').val();
+    	var selectedProd = $(thisQty).parent().parent().find('input[id*="prodSel"]').val();
     	var qty = $(thisQty).val();
     //	console.log("Selected Prod:"+selectedProd);
     //	console.log("Qty :"+qty);
@@ -247,7 +246,8 @@
     	 	
     	 	prod={};
     		
-    	 	prod["prodId"]=$(this).find('select option:selected').val();
+    	 //	prod["prodId"]=$(this).find('select option:selected').val();
+    		prod["prodId"]=$(this).find('input[id*="prodSel"]').val();
     	 
     	 	prod["prodCost"]=$(this).find('textarea[id*="cost"]').val();
     	 	
@@ -293,7 +293,6 @@
             success: function (data) {
             	if(data=="OK")
               		location.reload();
-              		
             }
            
         });
@@ -357,23 +356,59 @@
 	          response( cache[ term ] );
 	          return;
 	        }
-	 
-	        $.getJSON( "@routes.Application.getProductList()", request, function( data, status, xhr ) {
+	        jsonProdList = processTableRow();
+	 		var queryData = {term:request.term,exclude:jsonProdList};
+	        
+	 	/*	$.getJSON( "@routes.Application.getProductList()", queryData, function( data, status, xhr ) {
 	          var rows = JSONparse(data);
 	          cache[ term ] = rows;
 	         //console.log(rows);
 	          response( rows );
-	        });
+	        }); */
+	        
+	        
+	 		$.ajax({
+	 	        type: "GET",
+	 	        url:"@routes.Application.getProductList()",
+	 	        data: {term:request.term,exclude:jsonProdList},
+	 	        success: response,
+	 	        dataType: 'json',
+	 	        minLength: 2,
+	 	        delay: 100
+	 	     });
+	        
+	        
+	        
 	      },
       
 	      select: function(event, ui) {
 	      
 	            var focusedElement = $(this);
 	            focusedElement.val(ui.item.label);
-	            $('#prodSel').val(ui.item.value);
+	            $(this).parent().find('input[id*="prodSel"]').val(ui.item.id);
 	            
-	            console.log("ITEM VALUE: "+ui.item.value);
-	            console.log("ITEM ID: "+ui.item.id);
+	            /* set price and name desc in other input field start */
+	            
+	        $.ajax({
+	            type : "GET",
+	            url : "@routes.Application.getProductById()",
+	            data : "productId="+ui.item.id,
+	            dataType:'json',
+	        	success: function(data){
+	        		console.log(this);
+	            	bind();
+		        	$(focusedElement).parent().parent().parent().find('textarea[id*="cost"]').val(data.prodPrice);
+		        	$(focusedElement).parent().parent().parent().find('textarea[id*="desc"]').val(data.prodCode);
+		        	$(focusedElement).parent().parent().parent().find('textarea[id*="qty"]').val(0);
+		        	$(focusedElement).parent().parent().parent().find('textarea[id*="cost"]').trigger('blur');
+					bind();
+				
+				}
+        	});
+	            /*  Set price and name desc in other inptu end */
+	            	            
+	            /*console.log("ITEM VALUE: "+ui.item.value);
+	            console.log("ITEM ID: "+ui.item.id);*/
 	
 	            return false;
 	        

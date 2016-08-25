@@ -20,13 +20,13 @@ public class HTMLGenerator {
 			  +"<input id=\"prodSuggest\" class=\"prodSuggest\" >"
 		      +"<input type=\"hidden\" id=\"prodSel\"/>"
 			  
-			  +"<select id=\"prod\" name=\"product.id\" onchange=\"setPriceAndName(this)\">"
-			  +"<option class=\"blank\" value=\"\">-- Choose a Product --</option>";
-		      for(Map.Entry<String,String> mp:Product.getProductsWithoutThese(prodIdList).entrySet()){
+		      /*  +"<select id=\"prod\" name=\"product.id\" onchange=\"setPriceAndName(this)\">"
+			  +"<option class=\"blank\" value=\"\">-- Choose a Product --</option>"
+		       for(Map.Entry<String,String> mp:Product.getProductsWithoutThese(prodIdList).entrySet()){
 		    	  rowWithSelectTag = rowWithSelectTag		    	
 		    			  +"<option value="+mp.getKey()+">"+mp.getValue()+"</option>";
 		      }
-		      rowWithSelectTag = rowWithSelectTag+"</select>"
+		      rowWithSelectTag = rowWithSelectTag+"</select>" */
 		      +"<a class=\"delete\" href=\"javascript:;\" onclick=\"remove(this)\" title=\"Remove row\">X</a></div></td>"
 		      +"<td class=\"description\"><textarea id=\"description\"> </textarea></td>"
 		      +"<td><textarea class=\"cost\" id=\"cost\">$0</textarea></td>"
