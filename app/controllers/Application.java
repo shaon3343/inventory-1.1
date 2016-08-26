@@ -57,11 +57,17 @@ public class Application extends Controller {
 
 		//System.out.println(request().getQueryString("productId"));
 		try{
-			String pCode = request().getQueryString("term");
+		//	String pCode = request().getQueryString("term");
 			
+			final Map<String, String[]> data = request().body().asFormUrlEncoded();
+			String pCode = data.get("term")[0];
+			String exclude[] = data.get("exclude");
+		//	exclude
 			System.out.println("### TERM:"+pCode);
 			
-			JsonNode json = request().body().asJson();
+			//JsonNode json = request().body().asJson();
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode json = mapper.readTree(exclude[0]);
 			List<Map<String,String> > existProdList = new ArrayList<>(); 
 			if(json!=null){
 				 existProdList = Jutility.processJSON(json);
@@ -80,7 +86,7 @@ public class Application extends Controller {
 			}*/
 			
 			final StringWriter sw =new StringWriter();
-		    final ObjectMapper mapper = new ObjectMapper();
+		    mapper = new ObjectMapper();
 		    mapper.writeValue(sw, prodList);
 		    String toJsonList = sw.toString();//use toString() to convert to JSON
 		    sw.close(); 

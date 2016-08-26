@@ -245,13 +245,15 @@
     	 $('table[id*="items"] tbody tr.item-row').each(function(index){
     	 	
     	 	prod={};
-    		
+    	
     	 //	prod["prodId"]=$(this).find('select option:selected').val();
     		prod["prodId"]=$(this).find('input[id*="prodSel"]').val();
     	 
     	 	prod["prodCost"]=$(this).find('textarea[id*="cost"]').val();
     	 	
     	 	prod["prodQty"]=$(this).find('textarea[id*="qty"]').val();
+    	 	
+    	 //	console.log("in prod list"+prod);
     	 	
     	 	jsonProdList.push(prod); 
     	 
@@ -300,6 +302,7 @@
     }
      
      function remove(event){
+    	 console.log("in remove"+event);
      	$(event).closest('tr').remove();
    		update_total();
     	if ($(".delete").length < 2) $(".delete").hide();
@@ -352,12 +355,13 @@
 	    minLength: 2,
 	      source: function( request, response ) {
 	        var term = request.term;
-	        if ( term in cache ) {
+	       /* if ( term in cache ) {
 	          response( cache[ term ] );
 	          return;
-	        }
+	        }*/
 	        jsonProdList = processTableRow();
-	 		var queryData = {term:request.term,exclude:jsonProdList};
+	      //  console.log("prod Exist: "+ JSON.stringify(jsonProdList));
+	 		//var queryData = {term:request.term,exclude:jsonProdList};
 	        
 	 	/*	$.getJSON( "@routes.Application.getProductList()", queryData, function( data, status, xhr ) {
 	          var rows = JSONparse(data);
@@ -368,13 +372,19 @@
 	        
 	        
 	 		$.ajax({
-	 	        type: "GET",
+	 	        type: "POST",
 	 	        url:"@routes.Application.getProductList()",
-	 	        data: {term:request.term,exclude:jsonProdList},
-	 	        success: response,
+	 	        data: {term:request.term,exclude:JSON.stringify(jsonProdList)},
 	 	        dataType: 'json',
 	 	        minLength: 2,
-	 	        delay: 100
+	 	        delay: 100,
+	 	        success:function(data){
+	 	        	var rows = JSONparse(data);
+	 		        //  cache[ term ] = rows;
+	 		         //console.log(rows);
+	 		          response( rows );
+				
+				}
 	 	     });
 	        
 	        
@@ -395,7 +405,7 @@
 	            data : "productId="+ui.item.id,
 	            dataType:'json',
 	        	success: function(data){
-	        		console.log(this);
+	        		//console.log(this);
 	            	bind();
 		        	$(focusedElement).parent().parent().parent().find('textarea[id*="cost"]').val(data.prodPrice);
 		        	$(focusedElement).parent().parent().parent().find('textarea[id*="desc"]').val(data.prodCode);

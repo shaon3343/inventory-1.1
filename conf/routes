@@ -20,6 +20,6 @@ GET		/test-auto-suggest	controllers.Application.testAutoSuggest()
 
 #GET		/json-auto-suggest  controllers.Application.getProductList()
 
-GET		/json-auto-suggest  controllers.Application.getProductList()
+POST		/json-auto-suggest  controllers.Application.getProductList()
 
 #POST     /providejson                           controllers.Application.provideJSONData()

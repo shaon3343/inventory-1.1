@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import com.avaje.ebean.Expr;
 
+import play.Logger;
 import play.db.ebean.Model.Finder;
 import play.db.ebean.Model;
 import util.AppConst;
@@ -113,14 +114,24 @@ public class Product extends Model {
 	public static List<Product> suggestProdList(String prodCode,List<Map<String, String>> existProdList) {
 		List<Integer> prodIdList = new ArrayList<Integer>();
 		for(Map<String,String> mp:existProdList){
+			try{
 			prodIdList.add(Integer.parseInt(mp.get(AppConst.productId)));
+			}catch(Exception e){
+				
+			}
 		}
-		
-		List<Product> listProd = find.where()
+		List<Product> listProd = new ArrayList<Product>();
+		if(!prodIdList.isEmpty()){
+		 listProd = find.where()
 				.not(Expr.in("id",prodIdList))
 				.ilike("productCode","%"+prodCode+"%")
 				.ge("productQty",1).findList();
-		
+		}
+		else{
+			listProd = find.where()
+					.ilike("productCode","%"+prodCode+"%")
+					.ge("productQty",1).findList();
+		}
         return listProd;
 	}
 }
