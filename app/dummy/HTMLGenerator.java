@@ -27,7 +27,7 @@ public class HTMLGenerator {
 		    			  +"<option value="+mp.getKey()+">"+mp.getValue()+"</option>";
 		      }
 		      rowWithSelectTag = rowWithSelectTag+"</select>" */
-		      +"<a class=\"delete\" href=\"javascript:;\" onclick=\"remove(this)\" title=\"Remove row\">X</a></div></td>"
+		      +"<a class=\"delete\" title=\"Remove row\">X</a></div></td>"
 		      +"<td class=\"description\"><textarea id=\"description\"> </textarea></td>"
 		      +"<td><textarea class=\"cost\" id=\"cost\">$0</textarea></td>"
 		      +"<td><textarea class=\"qty\" id=\"qty\" onblur=\"checkQty(this)\">1</textarea></td>"

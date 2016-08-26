@@ -99,7 +99,7 @@
 		      }
 		      </select>  -->
 		    
-		      <a class="delete" href="javascript:;" onclick="remove(this)" title="Remove row">X</a></div></td>
+		      <a class="delete" title="Remove row">X</a></div></td>
 		      <td class="description"><textarea id="desc"></textarea></td>
 		      <td><textarea class="cost" id="cost">$0</textarea></td>
 		      <td><textarea class="qty" onblur="checkQty(this)" id="qty">1</textarea></td>
@@ -301,12 +301,13 @@
     	 
     }
      
-     function remove(event){
+     /*function remove(event){
     	 console.log("in remove"+event);
-     	$(event).closest('tr').remove();
+    	 $(event).parents('.item-row').remove();
+     	//$(event).closest('tr').remove();
    		update_total();
     	if ($(".delete").length < 2) $(".delete").hide();
-     }
+     } */
     
         	  
     $(document).ready(function() {
@@ -434,6 +435,12 @@
     	$(this).autocomplete(options);
 	});
   
+  	$(document).on('click',".delete", function(event) {
+  		$(event.target).parent().parent().parent().remove();
+      	//$(event).closest('tr').remove();
+    	update_total();
+     	if ($(".delete").length < 2) $(".delete").hide();
+	});
   
 	/* auto suggest end */
     	  $('input').click(function(){
