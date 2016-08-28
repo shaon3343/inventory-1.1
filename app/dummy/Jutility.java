@@ -1,6 +1,8 @@
 package dummy;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,5 +38,10 @@ public class Jutility {
     	    retProdList.add(productMap);
     	}
     	return retProdList;
+	}
+	
+	public static String getNowDate(){
+		String nowDate = new SimpleDateFormat(AppConst.DATE_TIME_FORMAT_MIL).format(new Date());
+		return nowDate;
 	}
 }

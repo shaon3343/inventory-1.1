@@ -12,6 +12,8 @@ POST	/submit-receipt		controllers.Application.submitReceipt()
 
 GET     /get-product-by-id  controllers.Application.getProductById()
 
+GET     /get-cust-by-id  controllers.Application.getCustomerbyId()
+
 POST  	/get-html-rows      controllers.Application.getHTML()
 
 GET  	/check-prod-qty		controllers.Application.checkProdQty()

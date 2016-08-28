@@ -1,10 +1,14 @@
 package models;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import play.db.ebean.Model;
@@ -15,6 +19,10 @@ import play.db.ebean.Model.Finder;
 public class SalesMen extends Model {
 	@Id
 	public Long id;
+	
+	@OneToMany
+	@JoinColumn(name="cust_receipt_id", referencedColumnName="receipt_id")
+	public Receipts custReceiptId;
 	
 	@Column(name = "sales_name")
 	public String salesManName;
@@ -38,5 +46,14 @@ public class SalesMen extends Model {
 		return find.byId(id);
 
 	}
+	
+	 public static Map<String,String> getSalesMenAsMap() {
+	        LinkedHashMap<String,String> salesMenList = new LinkedHashMap<String,String>();
+	        for(SalesMen men: SalesMen.find.orderBy("salesManName").findList()) {
+	        	salesMenList.put(men.id.toString(), men.salesManName);
+	        }
+	        
+	        return salesMenList;
+	    }
 	
 }

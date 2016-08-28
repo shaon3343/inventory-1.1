@@ -2,6 +2,7 @@
 
 @import helper._
 @import dummy.HTMLGenerator
+@import dummy.Jutility
 @main("Create Receipt") {
     @form(routes.Application.submitReceipt()){
 	
@@ -23,15 +24,12 @@
 	<div id="page-wrap">
 
 		<textarea id="header">INVOICE</textarea>
-		
+		<input type="hidden" id="receiptId" value="@Jutility.getNowDate()"/>
 		<div id="identity">
 		
-            <textarea id="address">Chris Coyier
-				123 Appleseed Street
-				Appleville, WI 53719
-	
-				Phone: (555) 555-5555</textarea>
-
+            <textarea id="customer-title">Widget Corp.
+			c/o Steve Widget</textarea>
+           
             <div id="logo">
 
               <div id="logoctr">
@@ -53,10 +51,21 @@
 		
 		<div style="clear:both"></div>
 		
+		<label> Customer : </label>
+		<select id="cust" name="cust" onchange="setCustomer(this)">
+		      <option class="blank" value="">-- Choose Customer--</option>
+		    	@for((k,v) <- SalesMen.getSalesMenAsMap()){
+		      		<option value="@k">@v</option>
+		      }
+		  </select>
+		   
 		<div id="customer">
-
-            <textarea id="customer-title">Widget Corp.
-			c/o Steve Widget</textarea>
+					
+			 <textarea id="address">Chris Coyier
+				123 Appleseed Street
+				Appleville, WI 53719
+	
+				Phone: (555) 555-5555</textarea>
 
             <table id="meta">
                 <tr>
@@ -69,7 +78,11 @@
                     <td><textarea id="date">December 15, 2009</textarea></td>
                 </tr>
                 <tr>
-                    <td class="meta-head">Amount Due</td>
+                    <td class="meta-head">Previous Amount Due</td>
+                    <td><div class="due_prev" id="due_prev">$0</div></td>
+                </tr>
+                <tr>
+                    <td class="meta-head">Amount Due Now</td>
                     <td><div class="due">$0</div></td>
                 </tr>
 
@@ -487,5 +500,32 @@
     	  $("#date").val(print_today());
     	  
     	});
+    </script>
+    
+    <script>
+    function setCustomer(selected){
+    	//alert(selected.value);
+    	$.ajax({
+            type : "GET",
+            url : "@routes.Application.getCustomerbyId()",
+            data : "salesMenId="+selected.value,
+            dataType:'json',
+        	success: function(data){
+          			console.log(data);
+	        		$('table[id*="meta"] tbody div.due_prev').text("$"+data.salesManTotalDue);
+	        		$('div#identity textarea#customer-title').text(data.salesManName);
+	        		$('div#customer textarea#address').text(data.salesManAddress+"\n"+data.salesManContact);
+	        		//document.getElementById("cost").value = data;
+					//$("#cost").trigger('blur');
+				//	bind();
+				//  $('table[id*="items"] tbody tr.item-row:last td textarea#cost:last').trigger('blur');
+			//	$(selected).parent().parent().parent().find('textarea[id*="cost"]').trigger('blur');
+				//	  bind();
+			
+			}
+        });
+    	
+    }
+    
     </script>
 }

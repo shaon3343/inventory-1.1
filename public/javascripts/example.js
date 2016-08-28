@@ -77,6 +77,7 @@ function update_total() {
 
 function update_balance() {
   var due = $("#total").html().replace("$","") - $("#paid").val().replace("$","");
+  due=due+parseFloat($("#due_prev").html().replace("$",""));
   due = roundNumber(due,2);
   
   $('.due').html("$"+due);

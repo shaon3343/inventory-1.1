@@ -16,6 +16,7 @@ import org.codehaus.jackson.node.ObjectNode;
 
 import models.Product;
 import models.Receipts;
+import models.SalesMen;
 import dummy.DummyProduct;
 import dummy.DummyReceipt;
 import dummy.HTMLGenerator;
@@ -24,6 +25,7 @@ import play.*;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.*;
+import util.AppConst;
 import views.html.*;
 
 public class Application extends Controller {
@@ -39,7 +41,7 @@ public class Application extends Controller {
 		try{
 			String pId = request().getQueryString("productId");
 			Product prod = Product.findByIdAndQty(Integer.parseInt(pId));			
-			ObjectNode jsonResp =  toJSON(prod);
+			ObjectNode jsonResp =  toJSONProduct(prod);
 			return ok(jsonResp);
 		}catch(Exception e){
 			Logger.info("EXCEPTION",e);
@@ -98,7 +100,7 @@ public class Application extends Controller {
 
 	}
 
-	private static ObjectNode toJSON(Product prod) {
+	private static ObjectNode toJSONProduct(Product prod) {
 		//JsonNode json = request().body().asJson();
 		ObjectNode result = Json.newObject();
 		if(prod==null){
@@ -115,7 +117,27 @@ public class Application extends Controller {
 		}
 		return result;
 	}
-
+	
+	private static ObjectNode toJSONSalesMan(SalesMen salesMen) {
+		//JsonNode json = request().body().asJson();
+		ObjectNode result = Json.newObject();
+		if(salesMen==null){
+			result.put(AppConst.salesManId,0);
+			result.put(AppConst.salesManName,"");
+			result.put(AppConst.salesManAddress,"");
+			result.put(AppConst.salesManTotalDue,0);
+			result.put(AppConst.salesManContact,"");
+		}
+		else{
+			result.put(AppConst.salesManId,salesMen.id);
+			result.put(AppConst.salesManName,salesMen.salesManName);
+			result.put(AppConst.salesManAddress,salesMen.salesManAddress);
+			result.put(AppConst.salesManTotalDue,salesMen.salesManTotalDue);
+			result.put(AppConst.salesManContact,salesMen.salesManContact);
+		}
+		return result;
+	}
+	
 	public static Result getHTML(){
 		
 		JsonNode json = request().body().asJson();
@@ -185,6 +207,23 @@ public class Application extends Controller {
 		return ok("OK");
 	}
 	
-	
+	public static Result getCustomerbyId(){
+		try{
+			String id =request().getQueryString("salesMenId");
+			
+			SalesMen man = SalesMen.findById(Integer.parseInt(id));
+			ObjectNode jsonResp = toJSONSalesMan(man);
+			return ok(jsonResp);
+		}catch(Exception e){
+			Logger.info("EXCEPTION",e);
+			ObjectNode result =  Json.newObject();
+			result.put(AppConst.salesManId,0);
+			result.put(AppConst.salesManName,"");
+			result.put(AppConst.salesManAddress,"");
+			result.put(AppConst.salesManTotalDue,0);
+			result.put(AppConst.salesManContact,"");
+			return ok(result);
+		}
+	}
 	
 }
