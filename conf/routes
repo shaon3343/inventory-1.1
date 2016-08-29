@@ -25,3 +25,12 @@ GET		/test-auto-suggest	controllers.Application.testAutoSuggest()
 POST		/json-auto-suggest  controllers.Application.getProductList()
 
 #POST     /providejson                           controllers.Application.provideJSONData()
+
+#Product
+GET		/product/create						     controllers.HRProductManage.create()
+POST	/product/create						     controllers.HRProductManage.save()
+GET		/product/list							 controllers.HRProductManage.list()
+GET		/product/show/:id						 controllers.HRProductManage.show(id: Long)
+GET		/product/edit/:id						 controllers.HRProductManage.edit(id: Long)
+POST	/product/edit							 controllers.HRProductManage.update()
+GET	    /product/delete/:id					   	 controllers.HRProductManage.delete(id: Long)

@@ -189,22 +189,29 @@ public class Application extends Controller {
 		//String json = request().getQueryString("jsonList");
 		JsonNode json = request().body().asJson();
 	//	System.out.println("JSON REQUEST: "+json);
-		
+		boolean savedRec = false;
 		if(json == null) {
 	        return badRequest("Expecting Json data");
 	    } else {
 	          	
 	       List<Map<String,String> > prodList = Jutility.processJSON(json);
 	       boolean checkAllProd = Product.checkAllProdQty(prodList);
+	       
 	       if(checkAllProd){
 	    	   
-	    	   boolean savedRec = Receipts.saveReceipts(prodList);
+	    	   savedRec= Receipts.saveReceipts(prodList);
 	       }
 	       
 	       
 	    }
-		flash("receiptSaved","RECEIPT SAVED SUCCESSFULLY");
-		return ok("OK");
+		String ret = "OK";
+		ret = ((savedRec==true)?"OK":"NOT OK");
+		
+		if(ret.equals("NOT OK"))
+			flash("receiptSaved","Failed to save receipt");
+		else
+			flash("receiptSaved","RECEIPT SAVED SUCCESSFULLY");
+		return ok(ret);
 	}
 	
 	public static Result getCustomerbyId(){

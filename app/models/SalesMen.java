@@ -20,9 +20,11 @@ public class SalesMen extends Model {
 	@Id
 	public Long id;
 	
-	@OneToMany
+	/*@OneToMany
 	@JoinColumn(name="cust_receipt_id", referencedColumnName="receipt_id")
-	public Receipts custReceiptId;
+	public Receipts custReceiptId;*/
+	/*@Column(name = "cust_receipt_id")
+	public String custReceiptId;*/
 	
 	@Column(name = "sales_name")
 	public String salesManName;
