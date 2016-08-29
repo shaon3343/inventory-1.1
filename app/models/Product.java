@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import com.avaje.ebean.Expr;
 
 import play.Logger;
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model.Finder;
 import play.db.ebean.Model;
 import util.AppConst;
@@ -23,15 +24,19 @@ public class Product extends Model {
 	@Id
 	public Long id;
 	
+	
 	@Column(name = "product_name")
 	public String productName;
+	
 	
 	@Column(name = "product_code")
 	public String productCode;
 	
+	
 	@Column(name = "product_price")
 	public float productPrice;
 	
+
 	@Column(name = "product_quantity")
 	public float productQty;
 	
@@ -45,6 +50,10 @@ public class Product extends Model {
 
 	public static Product findById(int id){
 		return find.byId(id);
+
+	}
+	public static Product findById(Long id){
+		return find.byId(Integer.parseInt(id+""));
 
 	}
 	public static List<Product> checkProdNameAndQty(String prodName, int qty){
@@ -133,5 +142,14 @@ public class Product extends Model {
 					.ge("productQty",1).findList();
 		}
         return listProd;
+	}
+	
+	public static void delete(Long id){
+		delete(id);
+	}
+
+	public static void create(Product product) {
+		product.save();
+		
 	}
 }

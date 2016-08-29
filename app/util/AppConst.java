@@ -16,4 +16,7 @@ public class AppConst {
 	public static final String salesManAddress = "salesManAddress";
 	public static final String salesManTotalDue = "salesManTotalDue";
 	public static final String salesManContact = "salesManContact";
+	public static final String ERROR_MESSAGE_ID_NOT_FOUND = "ID NOT FOUND";
+	public static final String SUCCESSFUL_DELETE_MESSAGE = "DELETED SUCCESSFULLY";
+	public static final String SUCCESS_MESSAGE = "SUCCESS";
 }
