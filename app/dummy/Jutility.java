@@ -27,10 +27,16 @@ public class Jutility {
     		String prodId = obj.findPath("prodId").getTextValue();
 	        String prodCost =  obj.findPath("prodCost").getTextValue();
 	        String prodQty = obj.findPath("prodQty").getTextValue();
+	        String receiptId = obj.findPath("receiptId").getTextValue();
+	        String paidAmount = obj.findPath("paid").getTextValue();
+	        String custId = obj.findPath("salesManId").getTextValue();
     		
 	        productMap.put(AppConst.productId,prodId);
 	        productMap.put(AppConst.productCost,prodCost);
 	        productMap.put(AppConst.productQty,prodQty);
+	        productMap.put(AppConst.receiptId,receiptId);
+	        productMap.put(AppConst.paidAmount,paidAmount);
+	        productMap.put(AppConst.salesManId,custId);
 	        
     	   /* System.out.println("### PROD ID: "+obj.findPath("prodId").getTextValue()+
     	    		" ###PROD COST "+obj.findPath("prodCost").getTextValue()+

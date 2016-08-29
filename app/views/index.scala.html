@@ -24,11 +24,10 @@
 	<div id="page-wrap">
 
 		<textarea id="header">INVOICE</textarea>
-		<input type="hidden" id="receiptId" value="@Jutility.getNowDate()"/>
+		
 		<div id="identity">
 		
-            <textarea id="customer-title">Widget Corp.
-			c/o Steve Widget</textarea>
+            <textarea id="customer-title"></textarea>
            
             <div id="logo">
 
@@ -53,7 +52,7 @@
 		
 		<label> Customer : </label>
 		<select id="cust" name="cust" onchange="setCustomer(this)">
-		      <option class="blank" value="">-- Choose Customer--</option>
+		      <option class="blank" value="">-- Choose Customer--</option> 
 		    	@for((k,v) <- SalesMen.getSalesMenAsMap()){
 		      		<option value="@k">@v</option>
 		      }
@@ -61,16 +60,12 @@
 		   
 		<div id="customer">
 					
-			 <textarea id="address">Chris Coyier
-				123 Appleseed Street
-				Appleville, WI 53719
-	
-				Phone: (555) 555-5555</textarea>
+			 <textarea id="address"></textarea>
 
             <table id="meta">
                 <tr>
                     <td class="meta-head">Invoice #</td>
-                    <td><textarea>000123</textarea></td>
+                    <td><textarea>@Jutility.getNowDate()</textarea></td>
                 </tr>
                 <tr>
 
@@ -99,7 +94,7 @@
 		      <th>Quantity</th>
 		      <th>Price</th>
 		  </tr>
-		  
+		  <input type="hidden" id="receiptId" value="@Jutility.getNowDate()"/>
 		  	  
 		  <tr class="item-row">
 		      <td class="item-name"><div class="delete-wpr">		      
@@ -146,7 +141,7 @@
 		  </tr>
 		
 		</table>
-		<input type="button" value="submit" onclick="processAndSubmit()"/>
+		<input id="submit" style="display:none" type="button" value="submit" onclick="processAndSubmit()"/>
 		<div id="terms">
 		  <h5>Terms</h5>
 		  <textarea>NET 30 Days. Finance Charge of 1.5% will be made on unpaid balances after 30 days.</textarea>
@@ -238,6 +233,8 @@
        				bind();
        				$(thisQty).parent().parent().css('background-color','');
        				
+       				$('div[id*="page-wrap"]').find('input[id*="submit"]').css('display','block');
+       				
        			}
        			else{
        				//console.log("not Available");
@@ -266,6 +263,12 @@
     	 	
     	 	prod["prodQty"]=$(this).find('textarea[id*="qty"]').val();
     	 	
+    	 	prod["receiptId"]=$('table[id*="items"]').find('input[id*="receiptId"]').val();
+    	 	
+    	 	prod["paid"]=$('table[id*="items"]').find('textarea[id*="paid"]').val();
+    	 	
+    	 	prod["salesManId"]=$('div[id*="page-wrap"]').find('select option:selected').val();
+    	 	
     	 //	console.log("in prod list"+prod);
     	 	
     	 	jsonProdList.push(prod); 
@@ -285,21 +288,6 @@
     
     function processAndSubmit(){
     	 jsonProdList = processTableRow();
-    /*	 $('table[id*="items"] tbody tr.item-row').each(function(index){
-    	 	
-    	 	prod={};
-    		
-    	 	prod["prodId"]=$(this).find('select option:selected').val();
-    	 
-    	 	prod["prodCost"]=$(this).find('textarea[id*="cost"]').val();
-    	 	
-    	 	prod["prodQty"]=$(this).find('textarea[id*="qty"]').val();
-    	 	
-    	 	jsonProdList.push(prod); 
-    	 	
-    	 });
-    	 console.log(jsonProdList);*/
-    	 
     	 $.ajax({
             url: '@routes.Application.submitReceipt()',
             type: 'post',
@@ -324,47 +312,9 @@
     
         	  
     $(document).ready(function() {
-
-	/* auto suggest start */
-	
-	/* var cache = {};
-    $( "#prodSuggest" ).autocomplete({
-      	  minLength: 2,
-	      source: function( request, response ) {
-	        var term = request.term;
-	        if ( term in cache ) {
-	          response( cache[ term ] );
-	          return;
-	        }
-	 
-	        $.getJSON( "@routes.Application.getProductList()", request, function( data, status, xhr ) {
-	          var rows = JSONparse(data);
-	          cache[ term ] = rows;
-	         //console.log(rows);
-	          response( rows );
-	        });
-	      },
-      
-	      select: function(event, ui) {
-	      
-	            var focusedElement = $(this);
-	            focusedElement.val(ui.item.label);
-	            $('#prodSel').val(ui.item.value);
-	            
-	            console.log("ITEM VALUE: "+ui.item.value);
-	            console.log("ITEM ID: "+ui.item.id);
-	
-	            return false;
-	        
-	    },
-	    focus: function (event, ui) {
-	       this.value = ui.item.label;
-	       event.preventDefault(); // Prevent the default focus behavior.
-		}
-      
-    }); */
     
-    var cache = {};
+	/* auto suggest start */
+	var cache = {};
   	var options = {
 	    minLength: 2,
 	      source: function( request, response ) {
@@ -433,8 +383,7 @@
 	            	            
 	            /*console.log("ITEM VALUE: "+ui.item.value);
 	            console.log("ITEM ID: "+ui.item.id);*/
-	
-	            return false;
+				return false;
 	        
 	    },
 	    focus: function (event, ui) {
@@ -449,10 +398,15 @@
 	});
   
   	$(document).on('click',".delete", function(event) {
-  		$(event.target).parent().parent().parent().remove();
+  		if($(".delete").length < 2){
+  			 $(".delete").hide();
+  		}
+  		else{
+  			$(event.target).parent().parent().parent().remove();
+  		}
       	//$(event).closest('tr').remove();
     	update_total();
-     	if ($(".delete").length < 2) $(".delete").hide();
+     	
 	});
   
 	/* auto suggest end */
@@ -505,6 +459,8 @@
     <script>
     function setCustomer(selected){
     	//alert(selected.value);
+    	
+    	
     	$.ajax({
             type : "GET",
             url : "@routes.Application.getCustomerbyId()",
@@ -512,7 +468,7 @@
             dataType:'json',
         	success: function(data){
           			console.log(data);
-	        		$('table[id*="meta"] tbody div.due_prev').text("$"+data.salesManTotalDue);
+	        		$('table[id*="meta"] tbody div.due_prev').text("$"+roundNumber(data.salesManTotalDue,2));
 	        		$('div#identity textarea#customer-title').text(data.salesManName);
 	        		$('div#customer textarea#address').text(data.salesManAddress+"\n"+data.salesManContact);
 	        		//document.getElementById("cost").value = data;
