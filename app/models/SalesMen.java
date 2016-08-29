@@ -48,7 +48,10 @@ public class SalesMen extends Model {
 		return find.byId(id);
 
 	}
-	
+	public static SalesMen findById(Long id){
+		return find.byId(Integer.parseInt(id+""));
+
+	}
 	 public static Map<String,String> getSalesMenAsMap() {
 	        LinkedHashMap<String,String> salesMenList = new LinkedHashMap<String,String>();
 	        for(SalesMen men: SalesMen.find.orderBy("salesManName").findList()) {
@@ -57,5 +60,19 @@ public class SalesMen extends Model {
 	        
 	        return salesMenList;
 	    }
+
+	public static void create(SalesMen salesMan) {
+		salesMan.save();
+		
+	}
+	
+	public static void update(SalesMen salesMan) {
+		salesMan.update();
+		
+	}
+	
+	public static void delete(Long id){
+		delete(id);
+	}
 	
 }

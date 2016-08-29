@@ -152,4 +152,8 @@ public class Product extends Model {
 		product.save();
 		
 	}
+	public static void update(Product product) {
+		product.update();
+		
+	}
 }

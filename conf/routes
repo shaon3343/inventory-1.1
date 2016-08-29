@@ -34,3 +34,12 @@ GET		/product/show/:id						 controllers.HRProductManage.show(id: Long)
 GET		/product/edit/:id						 controllers.HRProductManage.edit(id: Long)
 POST	/product/edit							 controllers.HRProductManage.update()
 GET	    /product/delete/:id					   	 controllers.HRProductManage.delete(id: Long)
+
+#Customer
+GET		/Customer/create						     controllers.HRProductManage.createSalesMan()
+POST	/Customer/create						     controllers.HRProductManage.saveSalesMan()
+GET		/Customer/list							 controllers.HRProductManage.salesMenList()
+GET		/Customer/show/:id						 controllers.HRProductManage.salesManShow(id: Long)
+GET		/Customer/edit/:id						 controllers.HRProductManage.salesManEdit(id: Long)
+POST	/Customer/edit							 controllers.HRProductManage.salesManupdate()
+GET	    /Customer/delete/:id					   	 controllers.HRProductManage.deleteSalesMan(id: Long)
