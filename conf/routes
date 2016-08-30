@@ -34,7 +34,8 @@ GET		/product/show/:id						 controllers.HRProductManage.show(id: Long)
 GET		/product/edit/:id						 controllers.HRProductManage.edit(id: Long)
 POST	/product/edit							 controllers.HRProductManage.update()
 GET	    /product/delete/:id					   	 controllers.HRProductManage.delete(id: Long)
-
+GET     /product/upload-xls						controllers.PushData.uploadPage()
+POST    /product/upload-xls						controllers.PushData.xlsupload()
 #Customer
 GET		/Customer/create						     controllers.HRProductManage.createSalesMan()
 POST	/Customer/create						     controllers.HRProductManage.saveSalesMan()
