@@ -19,7 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ParseSpreadsheet {
-	public boolean getDataFromSpreadsheet(File fileXls){
+	public ArrayList<ArrayList<String>> getDataFromSpreadsheet(File fileXls){
 
 
 		ArrayList<ArrayList<String>> contents = new ArrayList<ArrayList<String>>();
@@ -45,6 +45,9 @@ public class ParseSpreadsheet {
 			
 			String flag ="no error";
 			for(int i=1;i<=sheet1.getLastRowNum();i++){
+				
+				ArrayList<String> saveRow = new ArrayList<String>(); 
+				
 				//System.out.println("-----loop-------");
 				XSSFRow row = sheet1.getRow(i);
 				if(isEmptyRow(row)){continue;}
@@ -63,43 +66,45 @@ public class ParseSpreadsheet {
 						
 						switch (cell.getCellType()) {
 						case XSSFCell.CELL_TYPE_STRING:
-							System.out.println(cell.getRichStringCellValue().getString());
-
+							saveRow.add(cell.getRichStringCellValue().getString().trim());
 							break;
 						case XSSFCell.CELL_TYPE_NUMERIC:
-							if (DateUtil.isCellDateFormatted(cell)) {
-								System.out.println(formatter.formatCellValue(cell));
-								//str.add(cell.getDateCellValue().toString());
-								//System.out.println(formatter.formatCellValue(cell));
+							if (DateUtil.isCellDateFormatted(cell)){
+								/*System.out.println("  "+formatter.formatCellValue(cell));*/
+								saveRow.add(formatter.formatCellValue(cell).trim());
 							} else {
-								System.out.println(String.valueOf((long)cell.getNumericCellValue()));
+								//System.out.print("  "+String.valueOf((long)cell.getNumericCellValue()));
+								saveRow.add(String.valueOf((long)cell.getNumericCellValue()));
 								//System.out.println(cell.getNumericCellValue());
 							}
 							break;
 
 						default:
-							System.out.println("DEFAULT");
+							//System.out.println("DEFAULT");
 						}
+						
 						
 					//	System.out.println(">>>>>>>>>>>>>>"+cell.getRichStringCellValue());
 					//	cell.getRichStringCellValue().getString().trim();
 						
 					}
 				}
+				contents.add(saveRow);
+				//System.out.println("###### ROW SEPARATOR ###########");
 
 			} 
 
 
-			return true;
+			return contents;
 		}catch (FileNotFoundException e) {
 			e.printStackTrace();
-		
-			return false;
+			
+			return contents;
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			
-			return false;
+			return contents;
 
 		}
 

@@ -3,23 +3,23 @@ package controllers;
 import java.io.File;
 import java.util.ArrayList;
 
+import models.Product;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
-
 import util.AppConst;
 import util.ParseSpreadsheet;
 import views.html.setInventory.*;
 
 public class PushData extends Controller {
-	
-	public static Result uploadPage(){
-		
+
+	public static Result uploadPage() {
+
 		return ok(uploadproduct.render());
 
 	}
-	
+
 	public static Result xlsupload(){
 		MultipartFormData body = request().body().asMultipartFormData();
 		FilePart uploaded_file = body.getFile("uploaded_file");
@@ -44,9 +44,34 @@ public class PushData extends Controller {
 			File fileXls = uploaded_file.getFile();
 			String fileNameXls = uploaded_file.getFilename();
 			String path = AppConst.EXCEL_UPLOAD_DIR + fileNameXls;
-			
-			boolean isParsed = new ParseSpreadsheet().getDataFromSpreadsheet(fileXls);
-			
+
+			ArrayList<ArrayList<String>> spContents = new ParseSpreadsheet().getDataFromSpreadsheet(fileXls);
+
+			System.out.println("PARSED EXCEL Total Content: "+spContents.size());
+			boolean isParsed = false;
+			if(!spContents.isEmpty())
+				isParsed = true;
+			try{
+				for(ArrayList<String> content:spContents){
+					Product p = new Product();
+
+					p.productName = content.get(0);
+					p.productCode = content.get(1);
+					p.productPrice = Float.parseFloat(content.get(2));
+					p.productQty = Float.parseFloat(content.get(3));
+					Product pr=Product.getProductByCode(p);
+					if(pr!=null){
+						p.id =pr.id; 
+						Product.update(p);
+					}else{
+						Product.create(p);
+					}
+				}
+			}catch(Exception e){
+				isParsed = false;
+			}
+
+
 			if(isParsed){
 				flash("FLASH_SUCCESS_UPLOAD", "Uploaded and saved to Database");
 				return redirect(routes.PushData.uploadPage());
@@ -55,6 +80,6 @@ public class PushData extends Controller {
 				return redirect(routes.PushData.uploadPage());
 			}
 		}
-		
+
 	}
 }
