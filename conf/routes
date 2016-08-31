@@ -24,6 +24,8 @@ GET		/test-auto-suggest	controllers.Application.testAutoSuggest()
 
 POST		/json-auto-suggest  controllers.Application.getProductList()
 
+GET		/view-receipt			controllers.Application.createReceipt(rec: String)
+
 #POST     /providejson                           controllers.Application.provideJSONData()
 
 #Product

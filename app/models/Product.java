@@ -158,7 +158,7 @@ public class Product extends Model {
 
 	}
 
-	public static Product getProductByCode(Product pCode) {
+	public static Product getProduct(Product pCode) {
 		try{
 			return find.where().eq("productName", pCode.productName).eq("productCode", pCode.productCode).findUnique();
 		}catch(Exception e){

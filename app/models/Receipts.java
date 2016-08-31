@@ -93,20 +93,29 @@ public class Receipts extends Model {
 				}
 				Float paidAmount = Float.parseFloat(paid);
 				SalesMen man = SalesMen.findById(Integer.parseInt(prodList.get(0).get(AppConst.salesManId)));
-			//	man.custReceiptId = prodList.get(0).get(AppConst.receiptId);
+				PaymentHistory pHist = new PaymentHistory();
+				pHist.prevDue = man.salesManTotalDue;
+				
 				Float due = totPrice + man.salesManTotalDue;
-		//		if(due>=paidAmount)
-					due = due -paidAmount;
-			//	else
-			//		due=totPrice-paidAmount;
-				
+				due = due -paidAmount;
 				man.salesManTotalDue = due;
-				man.update();
+				SalesMen.update(man);
 				
+				pHist.salesMan = man.id;
+				pHist.currentDue = due;
+				pHist.paid = paidAmount;
+				pHist.salesDate = new Date();
+				pHist.receiptId = prodList.get(0).get(AppConst.receiptId);
+				
+				PaymentHistory.create(pHist);
 			}
 			return true;
 		}catch(Exception e){
 			return false;
 		}
+	}
+
+	public static List<Receipts> findByReceiptId(String rId) {
+		return find.where().eq("receiptId",rId ).findList();
 	}
 }

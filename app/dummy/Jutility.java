@@ -14,6 +14,12 @@ import org.codehaus.jackson.node.ArrayNode;
 import util.AppConst;
 
 public class Jutility {
+	
+	public static String formatDate(Date date){
+		return new SimpleDateFormat("MMMM dd, yyyy").format(date);
+		 
+	}
+	
 	public static List<Map<String,String>> processJSON(JsonNode json){
 		ArrayNode arr = (ArrayNode) json;
     	Iterator<JsonNode> it = arr.iterator();

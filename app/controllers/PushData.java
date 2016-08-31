@@ -59,7 +59,7 @@ public class PushData extends Controller {
 					p.productCode = content.get(1);
 					p.productPrice = Float.parseFloat(content.get(2));
 					p.productQty = Float.parseFloat(content.get(3));
-					Product pr=Product.getProductByCode(p);
+					Product pr=Product.getProduct(p);
 					if(pr!=null){
 						p.id =pr.id; 
 						Product.update(p);

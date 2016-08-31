@@ -1,5 +1,3 @@
-@(message: String,receiptForm: Form[dummy.DummyReceipt])
-
 @import helper._
 @import dummy.HTMLGenerator
 @import dummy.Jutility
@@ -294,8 +292,30 @@
             contentType: "application/json",
             data:  JSON.stringify(jsonProdList),
             success: function (data) {
-            	if(data=="OK")
-              		location.reload();
+            	if(data=="OK"){
+              		var receiptId=$('table[id*="items"]').find('input[id*="receiptId"]').val();
+    	 			var salesManId=$('div[id*="page-wrap"]').find('select option:selected').val();
+    	 			
+    	 			var url = "@routes.Application.createReceipt("")"+receiptId+"|"+salesManId;
+    	 			location.href=url;
+    	 			
+				   /* var xmlhttp;
+				
+				    if (window.XMLHttpRequest) {
+				        // code for IE7+, Firefox, Chrome, Opera, Safari
+				        xmlhttp = new XMLHttpRequest();
+				    } else {
+				        // code for IE6, IE5
+				        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				    }
+				
+				 //   xmlhttp.onreadystatechange = callback;
+				
+				    xmlhttp.open("GET", url, true);
+				    xmlhttp.send(); */
+    	 			
+              		
+              	}
             }
            
         });
@@ -467,7 +487,7 @@
             data : "salesMenId="+selected.value,
             dataType:'json',
         	success: function(data){
-          			console.log(data);
+          		//	console.log(data);
 	        		$('table[id*="meta"] tbody div.due_prev').text("$"+roundNumber(data.salesManTotalDue,2));
 	        		$('div#identity textarea#customer-title').text(data.salesManName);
 	        		$('div#customer textarea#address').text(data.salesManAddress+"\n"+data.salesManContact);
