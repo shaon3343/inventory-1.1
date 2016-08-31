@@ -259,6 +259,13 @@ public class Application extends Controller {
 		}
 		return rec;
 	}
+	
+	public static Result listReceipt(){
+		List<PaymentHistory> listPayHist = PaymentHistory.all();
+		
+		return ok(listReceipts.render("List Of Receipts",listPayHist));
+	}
+	
 	public static Result createReceipt(String rec){
 		
 		

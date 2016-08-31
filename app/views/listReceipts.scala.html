@@ -1,0 +1,57 @@
+@(message: String,receiptList:List[models.PaymentHistory])
+
+@import helper._
+@import dummy.HTMLGenerator
+@import dummy.Jutility
+@main("Create Receipt") {	
+	<style>
+		input[type=button] {
+	    width: 130px;
+	    height: 30px;
+	    
+	    background-color: #006db2;
+	    border: medium none #006db2;
+	    color: white;
+	    font-family: Arial, Helvetica, sans-serif;
+	    font-size: 12px;
+	    font-weight: bold;
+	}
+	
+	</style>
+	
+	<div id="page-wrap">
+
+		<textarea id="header">INVOICE</textarea>
+				
+		<div style="clear:both"></div>
+		
+			
+		<table id="items">
+		<tr>
+		      <th>Receipt Id</th>
+		      <th>Customer Name</th>
+		      <th>Previous Due</th>
+		      <th>Paid Amount</th>
+		      <th>Current Due</th>
+		      <th>Purchase Date</th>
+		  </tr>
+		  
+		  @for(r<-receiptList){
+		  <tr class="item-row">
+		    		      
+		   <td>   <input readonly id="prodSuggest" class="prodSuggest" value="@r.receiptId"> </td>
+		   <td class="description"><textarea readonly id="desc">@r.salesMan</textarea></td>
+		   <td><textarea readonly class="cost" id="cost">$@r.prevDue</textarea></td>
+		   <td><textarea readonly class="qty"  id="qty">@r.paid</textarea></td>
+		   <td><span class="price">@r.currentDue</span></td>
+		   <td><span class="price">@Jutility.formatDate(r.salesDate)</span></td>
+		  </tr>
+		  		  
+		 } 
+		  
+		
+		</table>
+		
+	</div>
+	
+}

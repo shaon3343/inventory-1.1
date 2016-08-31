@@ -26,6 +26,7 @@ POST		/json-auto-suggest  controllers.Application.getProductList()
 
 GET		/view-receipt			controllers.Application.createReceipt(rec: String)
 
+GET		/list-receipts			controllers.Application.listReceipt()
 #POST     /providejson                           controllers.Application.provideJSONData()
 
 #Product
