@@ -69,8 +69,17 @@ function update_total() {
 
   total = roundNumber(total,2);
 
-  $('#subtotal').html("$"+total);
+ // $('#subtotal').html("$"+total);
   $('#total').html("$"+total);
+  
+  
+ // var due = $("#total").html().replace("$","") - $("#paid").val().replace("$","");
+  duePrev = parseFloat($("#due_prev").html().replace("$",""));
+  var gtot=Number(total)+Number(duePrev);
+  gtot = roundNumber(gtot,2);
+  
+  $('.gtotal').html("$"+gtot);
+  
   
   update_balance();
 }

@@ -3,7 +3,8 @@
 @import helper._
 @import dummy.HTMLGenerator
 @import dummy.Jutility
-@main("Create Receipt") {	
+@import models.SalesMen
+@main("Receipt List") {	
 	<style>
 		input[type=button] {
 	    width: 130px;
@@ -16,12 +17,24 @@
 	    font-size: 12px;
 	    font-weight: bold;
 	}
-	
+	#invoice{
+		
+    height: 15px;
+    width: 100%;
+    margin: 20px 0;
+    background: #222;
+    text-align: center;
+    color: white;
+    font: bold 15px Helvetica, Sans-Serif;
+    text-decoration: uppercase;
+    letter-spacing: 20px;
+    padding: 8px 0px;
+	}
 	</style>
 	
 	<div id="page-wrap">
 
-		<textarea id="header">INVOICE</textarea>
+		<div id="invoice">Receipt List</div>
 				
 		<div style="clear:both"></div>
 		
@@ -39,10 +52,10 @@
 		  @for(r<-receiptList){
 		  <tr class="item-row">
 		    		      
-		   <td>   <input readonly id="prodSuggest" class="prodSuggest" value="@r.receiptId"> </td>
-		   <td class="description"><textarea readonly id="desc">@r.salesMan</textarea></td>
-		   <td><textarea readonly class="cost" id="cost">$@r.prevDue</textarea></td>
-		   <td><textarea readonly class="qty"  id="qty">@r.paid</textarea></td>
+		   <td> <a href='@routes.Application.createReceipt("")@r.receiptId|@r.salesMan'>  @r.receiptId </a></td>
+		   <td class="description">@SalesMen.findById(r.salesMan).salesManName</td>
+		   <td>$@r.prevDue</td>
+		   <td>@r.paid</td>
 		   <td><span class="price">@r.currentDue</span></td>
 		   <td><span class="price">@Jutility.formatDate(r.salesDate)</span></td>
 		  </tr>

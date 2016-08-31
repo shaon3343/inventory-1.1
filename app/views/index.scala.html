@@ -21,7 +21,7 @@
 	
 	<div id="page-wrap">
 
-		<textarea id="header">INVOICE</textarea>
+	<!-- 	<textarea id="header">INVOICE</textarea> -->
 		
 		<div id="identity">
 		
@@ -29,19 +29,19 @@
            
             <div id="logo">
 
-              <div id="logoctr">
-                <a href="javascript:;" id="change-logo" title="Change logo">Change Logo</a>
+        <!--      <div id="logoctr">
+                 <a href="javascript:;" id="change-logo" title="Change logo">Change Logo</a>
                 <a href="javascript:;" id="save-logo" title="Save changes">Save</a>
                 |
                 <a href="javascript:;" id="delete-logo" title="Delete logo">Delete Logo</a>
                 <a href="javascript:;" id="cancel-logo" title="Cancel changes">Cancel</a>
               </div>
-
+ -->
               <div id="logohelp">
                 <input id="imageloc" type="text" size="50" value="" /><br />
                 (max width: 540px, max height: 100px)
               </div>
-              <img id="image" src="images/logo.png" alt="logo" />
+              <img id="image" src="@routes.Assets.at("images/logo.jpg")"  alt="logo" />
             </div>
 		
 		</div>
@@ -75,7 +75,7 @@
                     <td><div class="due_prev" id="due_prev">$0</div></td>
                 </tr>
                 <tr>
-                    <td class="meta-head">Amount Due Now</td>
+                    <td class="meta-head">Curent Amount Due</td>
                     <td><div class="due">$0</div></td>
                 </tr>
 
@@ -115,17 +115,31 @@
 		    <td colspan="5"><a id="addrow" href="javascript:;" title="Add a row">Add a row</a></td>
 		  </tr>
 		  
-		  <tr>
+		  <!--  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Subtotal</td>
 		      <td class="total-value"><div id="subtotal">$0</div></td>
-		  </tr>
+		  </tr> -->
 		  <tr>
 
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Total</td>
 		      <td class="total-value"><div id="total">$0</div></td>
 		  </tr>
+		  <tr>
+		      <td colspan="2" class="blank"> </td>
+		      <td colspan="2" class="total-line">Previous Due</td>
+
+		      <td ><div class="due_prev" id="due_prev1">$0.00</div></td>
+		  </tr>
+		  
+		  <tr>
+
+		      <td colspan="2" class="blank"> </td>
+		      <td colspan="2" class="total-line">Grand Total</td>
+		      <td ><div class="gtotal" id="gtotal">$0</div></td>
+		  </tr>
+		  
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Amount Paid</td>
@@ -489,8 +503,9 @@
         	success: function(data){
           		//	console.log(data);
 	        		$('table[id*="meta"] tbody div.due_prev').text("$"+roundNumber(data.salesManTotalDue,2));
-	        		$('div#identity textarea#customer-title').text(data.salesManName);
-	        		$('div#customer textarea#address').text(data.salesManAddress+"\n"+data.salesManContact);
+	        		$('table[id*="items"] tbody div.due_prev').text("$"+roundNumber(data.salesManTotalDue,2));
+	        	//	$('div#identity textarea#customer-title').text(data.salesManName);
+	        		$('div#customer textarea#address').text(data.salesManName+"\n"+data.salesManAddress+"\n"+data.salesManContact);
 	        		//document.getElementById("cost").value = data;
 					//$("#cost").trigger('blur');
 				//	bind();

@@ -17,40 +17,49 @@
 	    font-weight: bold;
 	}
 	
+	#invoice{
+		
+    height: 15px;
+    width: 100%;
+    margin: 20px 0;
+    background: #222;
+    text-align: center;
+    color: white;
+    font: bold 15px Helvetica, Sans-Serif;
+    text-decoration: uppercase;
+    letter-spacing: 20px;
+    padding: 8px 0px;
+	}
+	
 	</style>
 	
 	<div id="page-wrap">
 
-		<textarea id="header">INVOICE</textarea>
+		<div id="invoice"> INVOICE</div>
 		
 		<div id="identity">
 		
-            <textarea id="customer-title">@receipt.customerName</textarea>
+        
            
             <div id="logo">
 
-              <div id="logoctr">
-                <a href="javascript:;" id="change-logo" title="Change logo">Change Logo</a>
-                <a href="javascript:;" id="save-logo" title="Save changes">Save</a>
-                |
-                <a href="javascript:;" id="delete-logo" title="Delete logo">Delete Logo</a>
-                <a href="javascript:;" id="cancel-logo" title="Cancel changes">Cancel</a>
-              </div>
-            <!--   <div id="logohelp">
+              
+             <div id="logohelp">
                 <input id="imageloc" type="text" size="50" value="" /><br />
                 (max width: 540px, max height: 100px)
               </div>
-              <img id="image" src="images/logo.png" alt="logo" />  -->
+              <img id="image" src="@routes.Assets.at("images/logo.jpg")" alt="logo" />
             </div>
 		
 		</div>
 		
 		<div style="clear:both"></div>
 		
-		<label> Customer : </label>
+		
 		<div id="customer">
-					
-			 <textarea id="address">@receipt.customerAddress , @receipt.customerContact</textarea>
+		<label> Customer : </label>
+					  <h4> @receipt.customerName </h4>
+			 @receipt.customerAddress ,<br/> @receipt.customerContact
 
             <table id="meta">
                 <tr>
@@ -67,7 +76,7 @@
                     <td><div class="due_prev" id="due_prev">$@receipt.prevDue</div></td>
                 </tr>
                 <tr>
-                    <td class="meta-head">Amount Due Now</td>
+                    <td class="meta-head">Curernt Amount Due</td>
                     <td><div class="due">$@receipt.dueNow</div></td>
                 </tr>
 
@@ -87,19 +96,19 @@
 		  
 		  @for(p<-receipt.prodList){
 		  <tr class="item-row">
-		      <td class="item-name"><div class="delete-wpr">		      
-		      <input readonly id="prodSuggest" class="prodSuggest" value="@p.productName">
-		      <td class="description"><textarea readonly id="desc">@p.productCode</textarea></td>
-		      <td><textarea readonly class="cost" id="cost">$@p.productPrice</textarea></td>
-		      <td><textarea readonly class="qty"  id="qty">@p.productQty</textarea></td>
+		      		      
+		      <td>@p.productName </td>
+		      <td class="description">@p.productCode</td>
+		      <td>$@p.productPrice</td>
+		      <td>@p.productQty</td>
 		      <td><span class="price">$@(p.productPrice*p.productQty)</span></td>
 		  </tr>
 		 } 
-		  <tr>
+	<!-- <tr>
 		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Subtotal</td>
-		      <td class="total-value"><div id="subtotal">$@receipt.totalPrice</div></td>
-		  </tr>
+		      <td class="total-value"><div id="subtotal">$receipt.totalPrice</div></td>
+		  </tr>  -->
 		  <tr>
 
 		      <td colspan="2" class="blank"> </td>
@@ -108,9 +117,22 @@
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
+		      <td colspan="2" class="total-line">Previous Due</td>
+
+		      <td class="total-value">$@receipt.prevDue</td>
+		  </tr>
+		  <tr>
+
+		      <td colspan="2" class="blank"> </td>
+		      <td colspan="2" class="total-line">Grand Total</td>
+		      <td ><div class="gtotal" id="gtotal">$@(receipt.totalPrice+receipt.prevDue)</div></td>
+		  </tr>
+		  
+		  <tr>
+		      <td colspan="2" class="blank"> </td>
 		      <td colspan="2" class="total-line">Amount Paid</td>
 
-		      <td class="total-value"><textarea id="paid">$@receipt.amountPaid</textarea></td>
+		      <td class="total-value">$@receipt.amountPaid</td>
 		  </tr>
 		  <tr>
 		      <td colspan="2" class="blank"> </td>
