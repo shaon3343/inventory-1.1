@@ -1,4 +1,16 @@
-This is your new Play 2.1 application
+This is a simple basic inventory management System developed with JAVA Play framework
 =====================================
 
-This file will be packaged with your application, when using `play dist`.
+### Traversing DOM Structure using JQuery 
+### getting all values from different position of the HTML page by JQuery 
+### JQuery Auto complete suggestion from DB , 
+### On blur update certain field
+### Call controller to navigate another page after AJAX call returns success
+### ajax navigate new page
+### Use Play built in JSON Jackson 
+### send JSON Req from HTML page to Controllers
+### Receive JSON Req and parse JSON using Play built in JSON Jackson
+### Simple CSS HTML Menu , drop down Menu
+### Simple CRUD (Insert , Update , Delete ) by PLAY Framework
+### Parsing Excel / Spreadshed (.xlsx ) file to get data and save to database  
+
