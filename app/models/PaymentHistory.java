@@ -53,7 +53,7 @@ public class PaymentHistory extends Model{
 
 	public static PaymentHistory findbyCustAndReceipt(String rId,String custId) {
 		
-		return find.where().eq("receiptId",rId).eq("salesMan",custId).findUnique();
+		return find.where().eq("receiptId",rId).eq("salesMan",Long.parseLong(custId)).findUnique();
 	}
 
 }
