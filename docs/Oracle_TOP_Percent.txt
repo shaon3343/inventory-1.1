@@ -1,0 +1,11 @@
+WITH     got_tenth     AS
+(
+     SELECT     account_number, amount,create_time,customer_name
+     ,     NTILE (1) OVER (ORDER BY TO_NUMBER(amount))     AS tenth
+     FROM     cdm_log
+)
+SELECT       account_number, amount,create_time,customer_name
+FROM       got_tenth
+WHERE       tenth     = 1
+ORDER BY  TO_NUMBER(amount)     DESC
+;
