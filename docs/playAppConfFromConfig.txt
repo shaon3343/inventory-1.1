@@ -1,0 +1,6 @@
+in application.conf:
+	bbl.logo="E:/ShaonsWork/LC-ALERT/LC_ALERT_WEB_DEC_2015/LC_ALERT_WEB_PROJECT/public/jasperTemplate/BRAC_BANK_LOGO.jpg"
+	(slash matters, so change slashes to forward slash)
+
+in vava method: 
+	public static final String BBL_LOGO_PATH = play.Play.application().configuration().getString("bbl.logo");
