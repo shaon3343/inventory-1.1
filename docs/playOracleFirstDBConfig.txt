@@ -1,0 +1,40 @@
+SQL> conn sys/123 as sysdba
+Connected.
+
+SQL> CREATE USER paytf IDENTIFIED BY pay24;  // Create the database paytf and pass pay24
+User created.
+
+SQL> GRANT CONNECT TO paytf;   // Grant 
+Grant succeeded.
+
+SQL> conn paytf/pay24 	// connect to that db using user/pass
+Connected.
+
+SQL> create table sample (id number (2), name varchar2 (63));   // trying to create a table
+create table sample (id number (2), name varchar2 (63))
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+SQL> conn sys/123 as sysdba
+Connected.
+ 
+SQL> grant resource to paytf;	// grant resource 
+Grant succeeded.
+
+SQL> conn paytf/pay24
+Connected.
+
+SQL> create table sample (id number (2), name varchar2 (63));  	// create a table named play_evolutions for 
+Table created. 							// configuration purpose
+CREATE TABLE play_evolutions
+(
+id Number(10,0) Not Null Enable,
+hash VARCHAR2(255 Byte),
+applied_at Timestamp Not Null,
+apply_script clob,
+revert_script clob,
+state Varchar2(255),
+last_problem clob,
+CONSTRAINT play_evolutions_pk PRIMARY KEY (id)
+);
